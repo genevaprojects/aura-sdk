@@ -1,3 +1,6 @@
+/** Genesis coprocessor — the hosted AURA network agents connect to by default. */
+export const DEFAULT_COPROCESSOR_URL = 'https://api.afhe.io:8443';
+const GENESIS_HOSTS = new Set(['api.afhe.io']);
 const DOMAIN_FNS = {
     add: { int: 'AddCipherInt', float: 'AddCipherFloat' },
     sub: { int: 'SubstractCipherInt', float: 'SubstractCipherFloat' },
@@ -77,6 +80,7 @@ export class FheSession {
         const health = await this.fhe.health();
         return {
             ok: health.status === 'ok',
+            network: this.fhe.url ?? DEFAULT_COPROCESSOR_URL,
             coprocessor: health.status,
             handles: this.store.size,
             ops: this.ops(),
@@ -156,14 +160,20 @@ export class FheSession {
         return stored;
     }
 }
-function isLocalhost(url) {
+function hostnameOf(url) {
     try {
-        const host = new URL(url).hostname;
-        return host === 'localhost' || host === '127.0.0.1' || host === '[::1]';
+        return new URL(url).hostname;
     }
     catch {
-        return false;
+        return '';
     }
+}
+function isLocalhost(url) {
+    const host = hostnameOf(url);
+    return host === 'localhost' || host === '127.0.0.1' || host === '[::1]';
+}
+function isGenesis(url) {
+    return GENESIS_HOSTS.has(hostnameOf(url));
 }
 async function buildFetch(baseUrl, insecure, provided) {
     if (provided)
@@ -186,7 +196,7 @@ export function createHttpCoprocessor(opts) {
     if (opts.apiKey)
         headers.authorization = `Bearer ${opts.apiKey}`;
     const timeoutMs = opts.timeoutMs ?? 120_000;
-    const insecureTLS = opts.insecureTLS ?? isLocalhost(baseUrl);
+    const insecureTLS = opts.insecureTLS ?? (isLocalhost(baseUrl) || isGenesis(baseUrl));
     let fetchImpl = opts.fetch;
     const ready = buildFetch(baseUrl, insecureTLS, opts.fetch).then((fn) => {
         fetchImpl = fn;
@@ -219,6 +229,7 @@ export function createHttpCoprocessor(opts) {
         return parsed;
     }
     const fhe = {
+        url: baseUrl,
         health: () => request('GET', '/health'),
         functions: () => request('GET', '/functions'),
         encrypt: async (domain, value, pub = false) => {
@@ -255,7 +266,7 @@ export function envCoprocessor() {
     const timeout = process.env.AFHE_TIMEOUT_MS ? Number(process.env.AFHE_TIMEOUT_MS) : undefined;
     const insecure = process.env.AFHE_INSECURE_TLS;
     return createHttpCoprocessor({
-        baseUrl: process.env.AFHE_API_URL ?? 'https://localhost:8443',
+        baseUrl: process.env.AFHE_API_URL ?? DEFAULT_COPROCESSOR_URL,
         apiKey: process.env.AFHE_API_KEY ?? process.env.AFHE_API_TOKEN,
         timeoutMs: Number.isFinite(timeout) ? timeout : undefined,
         insecureTLS: insecure == null ? undefined : insecure === '1' || insecure === 'true',

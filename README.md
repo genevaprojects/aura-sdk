@@ -1,59 +1,65 @@
-# Aura FHE
+# AURA Encrypted MCP
 
-Private compute for AI agents. One line:
+The encrypted compute network for AI. **MCP is the distribution.**
 
-```bash
-npx -y @aurafhe/mcp
-```
-
-That starts an [MCP](https://modelcontextprotocol.io) connector. Cursor, Claude, VS Code, and any other MCP host can then encrypt values, evaluate them without reading plaintext, and decrypt only the final answer.
+Paste this into Cursor, Claude, VS Code, or any MCP host. It talks to the AURA coprocessor. The model never sees the data.
 
 ```json
 {
   "mcpServers": {
-    "aura-fhe": {
+    "aura": {
       "command": "npx",
-      "args": ["-y", "@aurafhe/mcp"],
-      "env": {
-        "AFHE_API_URL": "https://localhost:8443"
-      }
+      "args": ["-y", "@aurafhe/mcp"]
     }
   }
 }
 ```
 
 ```bash
-claude mcp add aura-fhe -- npx -y @aurafhe/mcp
+npx -y @aurafhe/mcp
+claude mcp add aura -- npx -y @aurafhe/mcp
 ```
 
-Point `AFHE_API_URL` at your Aura FHE coprocessor. That is the whole setup.
+That is the whole install. No localhost, no SDK rebuild, no key files in chat.
+
+Default network: [`https://api.afhe.io:8443`](https://api.afhe.io:8443/health)
 
 ---
 
-## Why this exists
+## The story
 
-Language models should be able to **compute on private data** without the data becoming part of the prompt.
+AI is moving from assistants to agents to machines. Every step increases the data it must touch. Today's stack protects data at rest and in transit — then **decrypts it the moment a model works on it**.
 
-Aura FHE is fully homomorphic evaluation for AI workflows:
+AURA closes that gap:
 
-1. Seal inputs (`fhe_encrypt` or `fhe_private_eval`)
-2. Run math, stats, comparisons, or string ops on sealed values
-3. Reveal only the result the user asked for (`reveal: true`)
+1. **Encrypt at the owner** — data is sealed before it leaves
+2. **Compute on ciphertext** — the coprocessor runs the job without seeing plaintext
+3. **Decrypt only at the recipient** — the agent reveals only the answer you asked for
 
-The model sees short handles (`ct_1`), not plaintext and not giant ciphertext blobs.
+FHE is the moat. MCP is how every lab, agent, and tool already speaks. AURA sits in the middle: encrypted retrieval, SQL, inference, and private math on the same coprocessor the SDK already uses.
 
-## Tools the agent gets
+```text
+LLMs · agents · tools · devices
+        ↓  MCP
+AURA Encrypted MCP     ← this package
+        ↓  HTTPS
+AURA coprocessor network
+```
 
-| Tool | Use it for |
+Existing AI migrates in. No rebuild.
+
+---
+
+## What the agent can do
+
+| Tool | Role |
 |---|---|
-| `fhe_status` | Is private compute reachable? |
-| `fhe_ops` | Which ops this coprocessor can run |
-| `fhe_private_eval` | **Main AI path.** Seal → evaluate → optional reveal |
-| `fhe_encrypt` | Keep a sealed value around as `ct_…` |
-| `fhe_compute` | Run an op on handles (and optional extra plaintext) |
-| `fhe_decrypt` | Reveal a handle when the user asked for the answer |
+| `fhe_status` | Is the AURA network reachable? |
+| `fhe_ops` | Operations the coprocessor will run on ciphertext |
+| `fhe_private_eval` | **Main path.** Seal → evaluate → optional reveal |
+| `fhe_encrypt` / `fhe_compute` / `fhe_decrypt` | Multi-step graphs with `ct_…` handles |
 
-Example agent call:
+The model holds handles, not secrets. Ciphertext never has to enter the prompt.
 
 ```json
 {
@@ -67,53 +73,43 @@ Example agent call:
 }
 ```
 
-The coprocessor sees the numbers. The chat transcript does not need to.
+---
 
-## Install on every host
+## Hosts
 
-### Cursor
-
-Project file `.cursor/mcp.json` or user file `~/.cursor/mcp.json`:
+**Cursor** — `.cursor/mcp.json` or `~/.cursor/mcp.json`:
 
 ```json
 {
   "mcpServers": {
-    "aura-fhe": {
+    "aura": {
       "command": "npx",
-      "args": ["-y", "@aurafhe/mcp"],
-      "env": {
-        "AFHE_API_URL": "https://localhost:8443"
-      }
+      "args": ["-y", "@aurafhe/mcp"]
     }
   }
 }
 ```
 
-### Claude Code / Claude Desktop
+**Claude Code**
 
 ```bash
-claude mcp add aura-fhe -- npx -y @aurafhe/mcp
+claude mcp add aura -- npx -y @aurafhe/mcp
 ```
 
-Same JSON works in Claude Desktop MCP settings.
-
-### VS Code Copilot
+**VS Code Copilot** — `.vscode/mcp.json`:
 
 ```json
 {
   "servers": {
-    "aura-fhe": {
+    "aura": {
       "command": "npx",
-      "args": ["-y", "@aurafhe/mcp"],
-      "env": {
-        "AFHE_API_URL": "https://localhost:8443"
-      }
+      "args": ["-y", "@aurafhe/mcp"]
     }
   }
 }
 ```
 
-### Remote HTTP (one shared endpoint)
+**Hosted HTTP** (one URL for a team or product):
 
 ```bash
 npx -y @aurafhe/mcp --http --port 8787
@@ -122,61 +118,42 @@ npx -y @aurafhe/mcp --http --port 8787
 ```json
 {
   "mcpServers": {
-    "aura-fhe": {
-      "url": "http://127.0.0.1:8787/mcp"
-    }
+    "aura": { "url": "https://mcp.afhe.io/mcp" }
   }
 }
 ```
 
-### From this repo before npm publish
+Point `mcp.afhe.io` at that process when you terminate TLS in front of it.
+
+Until `@aurafhe/mcp` is on npm:
 
 ```bash
 npx -y github:genevaprojects/aura-sdk
 ```
 
-## Environment
+Canonical repo: [github.com/aurafhe/mcp](https://github.com/aurafhe/mcp)
+
+---
+
+## Environment (optional)
+
+Zero config hits genesis compute. Override only when you must:
 
 | Variable | Default | Purpose |
 |---|---|---|
-| `AFHE_API_URL` | `https://localhost:8443` | Coprocessor base URL |
-| `AFHE_API_KEY` | — | Optional `Authorization: Bearer` |
+| `AFHE_API_URL` | `https://api.afhe.io:8443` | Coprocessor |
+| `AFHE_API_KEY` | — | Bearer token if the node requires it |
 | `AFHE_TIMEOUT_MS` | `120000` | Per-request timeout |
-| `AFHE_INSECURE_TLS` | localhost only | Set `1` to trust a self-signed cert on a non-local host |
+| `AFHE_INSECURE_TLS` | genesis + localhost | Set `0` to require a valid certificate |
 
-Localhost TLS is trusted automatically so a local coprocessor works without extra flags.
+---
 
-## Language SDKs (optional)
+## Language SDKs
 
-If you are writing an app instead of wiring an agent, the same coprocessor speaks HTTPS+JSON:
+Same coprocessor, for apps that are not MCP hosts. See [`clients/`](clients/).
 
-```ts
-import { connect } from '@aura/fhe-client'
-
-const fhe = await connect()
-const sum = await fhe.addInt(await fhe.encryptInt(25), await fhe.encryptInt(17))
-console.log(await fhe.decryptInt(sum)) // "42"
-```
-
-| Client | Install |
-|---|---|
-| TypeScript | `npm install @aura/fhe-client` |
-| Python | `pip install aura-fhe` |
-| Go | `go get github.com/aurafhe/fhe-client/clients/go` |
-| CLI | `npm install -g @aura/fhe-cli` |
-
-Walkthrough: [docs/AI_FHE.md](docs/AI_FHE.md) · protocol: [docs/PROTOCOL.md](docs/PROTOCOL.md)
-
-## Develop
-
-```bash
-npm install
-npm test
-npm run inspector
-```
-
-`npm run inspector` opens the MCP Inspector against this connector.
+Docs: [docs.afhe.io](https://docs.afhe.io) · [docs/AI_FHE.md](docs/AI_FHE.md)
 
 ## License
 
-MIT
+MIT · Mochi Labs · [gen@afhe.io](mailto:gen@afhe.io)

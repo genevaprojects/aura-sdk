@@ -1,9 +1,8 @@
 # Examples
 
-Each folder is a self-contained, runnable example. They all assume a
-coprocessor is reachable at `https://localhost:8443` — start one with
-your preferred Aura FHE server or point them at any other URL via the
-`AFHE_API_URL` env var.
+Each folder is a self-contained, runnable example. The MCP connector
+defaults to the hosted coprocessor at `https://api.afhe.io:8443`. Language
+examples can use that URL or a local node via `AFHE_API_URL`.
 
 | # | Folder | Language | What it shows |
 |---|---|---|---|

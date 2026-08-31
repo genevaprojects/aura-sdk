@@ -18,11 +18,18 @@ function fail(err: unknown) {
 }
 
 export function createFheServer(session: FheSession = new FheSession(envCoprocessor())): McpServer {
-  const server = new McpServer({
-    name: 'aura-fhe',
-    version: VERSION,
-    title: 'Aura FHE',
-  })
+  const server = new McpServer(
+    {
+      name: 'aura',
+      version: VERSION,
+      title: 'AURA Encrypted MCP',
+      websiteUrl: 'https://afhe.io',
+    },
+    {
+      instructions:
+        'AURA is the encrypted compute network for AI. Agents reach ciphertext compute through this MCP. Call fhe_status, then fhe_private_eval. Data stays encrypted from input to output. Reveal only the final answer. Never print raw ciphertext; use ct_ handles.',
+    },
+  )
 
   server.registerTool(
     'fhe_status',

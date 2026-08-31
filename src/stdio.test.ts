@@ -42,7 +42,7 @@ test('stdio handshake advertises fhe_private_eval', async (t) => {
   })
 
   const init = JSON.parse(await waitFor(lines, (line) => jsonId(line) === 1, 15_000))
-  assert.equal(init.result.serverInfo.name, 'aura-fhe')
+  assert.equal(init.result.serverInfo.name, 'aura')
   send(child, { jsonrpc: '2.0', method: 'notifications/initialized' })
   send(child, { jsonrpc: '2.0', id: 2, method: 'tools/list', params: {} })
   const listed = JSON.parse(await waitFor(lines, (line) => jsonId(line) === 2, 8_000))

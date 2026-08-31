@@ -1,57 +1,20 @@
-# MCP host snippets
+# Connect AURA
 
-Drop one of these into your AI host. Replace the URL if your coprocessor is not local.
-
-## Cursor — `.cursor/mcp.json` or `~/.cursor/mcp.json`
+Paste this. It uses the hosted coprocessor. No local server.
 
 ```json
 {
   "mcpServers": {
-    "aura-fhe": {
+    "aura": {
       "command": "npx",
-      "args": ["-y", "@aurafhe/mcp"],
-      "env": {
-        "AFHE_API_URL": "https://localhost:8443"
-      }
+      "args": ["-y", "@aurafhe/mcp"]
     }
   }
 }
 ```
-
-## Claude Code
 
 ```bash
-claude mcp add aura-fhe -- npx -y @aurafhe/mcp
+claude mcp add aura -- npx -y @aurafhe/mcp
 ```
 
-## VS Code Copilot — `.vscode/mcp.json`
-
-```json
-{
-  "servers": {
-    "aura-fhe": {
-      "command": "npx",
-      "args": ["-y", "@aurafhe/mcp"],
-      "env": {
-        "AFHE_API_URL": "https://localhost:8443"
-      }
-    }
-  }
-}
-```
-
-## HTTP
-
-```bash
-npx -y @aurafhe/mcp --http --port 8787
-```
-
-```json
-{
-  "mcpServers": {
-    "aura-fhe": {
-      "url": "http://127.0.0.1:8787/mcp"
-    }
-  }
-}
-```
+Until npm publish: `npx -y github:genevaprojects/aura-sdk`

@@ -3,7 +3,7 @@ import { createServer } from 'node:http';
 import { createMcpHandler } from '@modelcontextprotocol/server';
 import { serveStdio } from '@modelcontextprotocol/server/stdio';
 import { createFheServer } from './server.js';
-import { envCoprocessor, FheSession } from './fhe.js';
+import { envCoprocessor, FheSession, DEFAULT_COPROCESSOR_URL } from './fhe.js';
 async function main() {
     const coprocessor = envCoprocessor();
     try {
@@ -43,13 +43,13 @@ async function main() {
                     res.end(Buffer.from(await response.arrayBuffer()));
                 })();
             });
-        }).listen(port, '127.0.0.1', () => {
-            console.error(`Aura FHE MCP on http://127.0.0.1:${port}/mcp`);
+        }).listen(port, '0.0.0.0', () => {
+            console.error(`AURA Encrypted MCP on http://0.0.0.0:${port}/mcp`);
         });
         return;
     }
     serveStdio(factory);
-    console.error('Aura FHE MCP running on stdio');
+    console.error(`AURA Encrypted MCP → ${process.env.AFHE_API_URL ?? DEFAULT_COPROCESSOR_URL}`);
 }
 main().catch((err) => {
     console.error(err);

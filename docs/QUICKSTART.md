@@ -10,17 +10,17 @@ npx -y @aurafhe/mcp
 
 Or add it to Cursor / Claude / VS Code. Snippets: [`examples/mcp`](../examples/mcp/).
 
-You need a compatible Aura FHE coprocessor. Default URL:
+You need a compatible Aura FHE coprocessor. Default is the hosted network:
 
 ```text
-https://localhost:8443
+https://api.afhe.io:8443
 ```
 
 ```bash
-curl -k https://localhost:8443/health
+curl -k https://api.afhe.io:8443/health
 ```
 
-Override with `AFHE_API_URL`.
+Override with `AFHE_API_URL` only for a local node.
 
 Ask the agent:
 

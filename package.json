@@ -1,7 +1,7 @@
 {
   "name": "@aurafhe/mcp",
   "version": "0.4.0",
-  "description": "One-line MCP connector for Aura FHE private AI compute. Encrypt, evaluate, and decrypt from Cursor, Claude, or any MCP host.",
+  "description": "AURA Encrypted MCP — the access layer for ciphertext AI. One line connects Cursor, Claude, and any agent to the AURA coprocessor.",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
@@ -36,16 +36,16 @@
     "cursor",
     "claude"
   ],
-  "author": "Aura FHE <gen@aurafhe.io>",
+  "author": "Mochi Labs <gen@afhe.io>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/genevaprojects/aura-sdk.git"
+    "url": "git+https://github.com/aurafhe/mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/genevaprojects/aura-sdk/issues"
+    "url": "https://github.com/aurafhe/mcp/issues"
   },
-  "homepage": "https://github.com/genevaprojects/aura-sdk#readme",
+  "homepage": "https://afhe.io",
   "dependencies": {
     "@modelcontextprotocol/server": "^2.0.0",
     "zod": "^4.0.0"

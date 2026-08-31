@@ -215,4 +215,10 @@ describe('FheSession', () => {
     assert.ok(names.includes('mean'))
     assert.ok(!names.some((n) => /skb|pkb|dictb|keygen/i.test(n)))
   })
+
+  test('defaults to the AURA genesis coprocessor, not localhost', async () => {
+    const { DEFAULT_COPROCESSOR_URL } = await import('./fhe.ts')
+    assert.equal(DEFAULT_COPROCESSOR_URL, 'https://api.afhe.io:8443')
+    assert.ok(!DEFAULT_COPROCESSOR_URL.includes('localhost'))
+  })
 })

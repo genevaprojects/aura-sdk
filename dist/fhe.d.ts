@@ -1,5 +1,8 @@
 export type Domain = 'int' | 'float' | 'string' | 'binary';
+/** Genesis coprocessor — the hosted AURA network agents connect to by default. */
+export declare const DEFAULT_COPROCESSOR_URL = "https://api.afhe.io:8443";
 export interface Coprocessor {
+    url?: string;
     health(): Promise<{
         status: string;
     }>;
@@ -30,6 +33,7 @@ export declare class FheSession {
     ops(): OpInfo[];
     status(): Promise<{
         ok: boolean;
+        network: string;
         coprocessor: string;
         handles: number;
         ops: OpInfo[];

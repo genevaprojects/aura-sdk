@@ -78,23 +78,18 @@ fhe enc int 1 > b.ct
 fhe add int "$(cat a.ct)" "$(cat b.ct)" | fhe dec int
 ```
 
-`connect()` defaults to `https://localhost:8443`, handles localhost TLS, and
-auto-loads `file/skb`, `file/pkb`, and `file/dictb`.
+`connect()` in the language SDKs still defaults to a local node unless you set `AFHE_API_URL`. The MCP connector defaults to the hosted genesis coprocessor.
 
 ## Where to point it
 
-Point the SDK at any compatible Aura FHE coprocessor.
-
-Default:
+MCP (this product) defaults to:
 
 ```text
-https://localhost:8443
+https://api.afhe.io:8443
 ```
 
-Health check:
-
 ```bash
-curl -k https://localhost:8443/health
+curl -k https://api.afhe.io:8443/health
 ```
 
 ## Recommended keygen profile
