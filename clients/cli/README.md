@@ -7,7 +7,7 @@ npm install -g @aura/fhe-cli
 ```
 
 ```bash
-fhe connect --url https://localhost:8443   # one-time setup, saved to ~/.aura-fhe/config.json
+fhe connect --url https://localhost:8443   # local node; or https://api.afhe.io:8443
 fhe health                                  # {"status":"ok"}
 
 # Encrypt → add → decrypt

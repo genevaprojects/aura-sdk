@@ -8,7 +8,7 @@ version = "0.3.0"
 description = "Python client for the Aura Fully Homomorphic Encryption coprocessor"
 readme = "README.md"
 license = { text = "MIT" }
-authors = [{ name = "Aura FHE" }]
+authors = [{ name = "Mochi Labs", email = "gen@afhe.io" }]
 requires-python = ">=3.8"
 keywords = ["fhe", "homomorphic", "encryption", "privacy", "aura", "afhe"]
 classifiers = [
@@ -24,8 +24,8 @@ dependencies = []
 [project.urls]
 Homepage      = "https://afhe.io"
 Documentation = "https://docs.afhe.io"
-Repository    = "https://github.com/aurafhe/fhe-client"
-Issues        = "https://github.com/aurafhe/fhe-client/issues"
+Repository    = "https://github.com/aurafhe/mcp"
+Issues        = "https://github.com/aurafhe/mcp/issues"
 
 [tool.setuptools]
 packages = ["aura_fhe"]

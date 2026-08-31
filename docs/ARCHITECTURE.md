@@ -10,7 +10,7 @@ Coprocessor
 Private evaluation engine
 ```
 
-The connector is the product. Language SDKs in `clients/` are the same protocol for apps that are not MCP hosts. Default network: `https://api.afhe.io:8443`.
+The connector is the product. Language SDKs in `clients/` are the same protocol for apps that are not MCP hosts. Default network: `https://api.afhe.io:8443`. Story: [STORY.md](STORY.md).
 
 ## What the agent sees
 
@@ -33,5 +33,3 @@ The HTTP contract in [PROTOCOL.md](PROTOCOL.md): health, encrypt, decrypt, gener
 - the coprocessor can change implementation as long as the HTTP contract holds
 - AURA wraps the execution path: models and agents speak MCP, this connector
 reaches the coprocessor, ciphertext never has to enter the prompt.
-
-Default network: `https://api.afhe.io:8443`.

@@ -4,7 +4,7 @@ Quickstart:
 
     from aura_fhe import connect
 
-    fhe = connect()                              # localhost:8443, self-signed TLS ok, keys loaded
+    fhe = connect()                              # localhost:8443; genesis via $AFHE_API_URL
     a   = fhe.encrypt_int(25)
     b   = fhe.encrypt_int(17)
     print(fhe.decrypt_int(fhe.add_int(a, b)))    # "42"

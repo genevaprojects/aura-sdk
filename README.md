@@ -31,7 +31,7 @@ To stand up the GitHub org, npm package, TLS, and hosted URL, follow **[docs/LAU
 
 ## The story
 
-AI is moving from assistants to agents to machines. Every step increases the data it must touch. Today's stack protects data at rest and in transit — then **decrypts it the moment a model works on it**.
+AI is moving from assistants to agents to transactions to organisations to machines. Every step increases the data it must touch. Today's stack protects data at rest and in transit — then **decrypts it the moment a model works on it**.
 
 AURA closes that gap:
 
@@ -39,7 +39,7 @@ AURA closes that gap:
 2. **Compute on ciphertext** — the coprocessor runs the job without seeing plaintext
 3. **Decrypt only at the recipient** — the agent reveals only the answer you asked for
 
-FHE is the moat. MCP is how every lab, agent, and tool already speaks. AURA sits in the middle: encrypted retrieval, SQL, inference, and private math on the same coprocessor the SDK already uses.
+FHE is the moat. MCP is the distribution. Existing AI migrates in. No rebuild. Full narrative: [docs/STORY.md](docs/STORY.md).
 
 ```text
 LLMs · agents · tools · devices
@@ -63,6 +63,8 @@ Existing AI migrates in. No rebuild.
 | `fhe_encrypt` / `fhe_compute` / `fhe_decrypt` | Multi-step graphs with `ct_…` handles |
 
 The model holds handles, not secrets. Ciphertext never has to enter the prompt.
+
+Live coprocessor ops: arithmetic, compare, bitwise, strings, scientific. Retrieval, SQL, and inference are roadmap — [docs/STORY.md](docs/STORY.md).
 
 ```json
 {
@@ -128,9 +130,11 @@ npx -y @aurafhe/mcp --http --port 8787
 
 Point `mcp.afhe.io` at that process when you terminate TLS in front of it.
 
-Until `@aurafhe/mcp` is on npm:
+Until `@aurafhe/mcp` is on npm, run it from GitHub:
 
 ```bash
+npx -y github:aurafhe/mcp
+# fallback while that repo is still empty:
 npx -y github:genevaprojects/aura-sdk
 ```
 

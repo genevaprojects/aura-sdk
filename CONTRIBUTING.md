@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping make private AI compute easier.
+Thanks for helping make private AI compute easier. Canonical repo: [github.com/aurafhe/mcp](https://github.com/aurafhe/mcp). Story: [docs/STORY.md](docs/STORY.md).
 
 ## Reporting bugs
 

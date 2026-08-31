@@ -1,6 +1,7 @@
 # 02 — Hello FHE (Go)
 
 ```bash
+# Module path: github.com/aurafhe/mcp/clients/go
 go run main.go
 ```
 

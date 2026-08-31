@@ -14,11 +14,11 @@
     "test": "node --test test/*.test.js"
   },
   "keywords": ["fhe", "cli", "homomorphic", "encryption", "aura", "afhe"],
-  "author": "Aura FHE",
+  "author": "Mochi Labs <gen@afhe.io>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aurafhe/fhe-client.git",
+    "url": "https://github.com/aurafhe/mcp.git",
     "directory": "clients/cli"
   },
   "dependencies": {

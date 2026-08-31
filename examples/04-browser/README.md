@@ -5,7 +5,8 @@ browser. Plaintext values are typed into the page; only ciphertext leaves the
 page.
 
 ```bash
-# 1. Start the coprocessor on https://localhost:8443
+# 1. Start a local coprocessor on https://localhost:8443
+#    (or set the page to https://api.afhe.io:8443 and accept the TLS warning)
 # 2. Serve this directory:
 npx serve .
 # 3. Open http://localhost:3000 in your browser (or whatever port serve picked).

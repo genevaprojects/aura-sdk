@@ -1,6 +1,6 @@
 # Quickstart
 
-Private AI compute in one line, then optional language SDKs.
+Private AI compute in one line, then optional language SDKs. Story: [STORY.md](STORY.md).
 
 ## 1. Connect the MCP connector
 
@@ -10,7 +10,7 @@ npx -y @aurafhe/mcp
 
 Or add it to Cursor / Claude / VS Code. Snippets: [`examples/mcp`](../examples/mcp/).
 
-You need a compatible Aura FHE coprocessor. Default is the hosted network:
+Default network is genesis compute:
 
 ```text
 https://api.afhe.io:8443
@@ -32,7 +32,7 @@ It should call `fhe_private_eval` and return `42`.
 
 ## 2. Optional: language SDKs
 
-Same coprocessor, for apps that are not MCP hosts.
+Same coprocessor, for apps that are not MCP hosts. SDK `connect()` defaults to a **local** node at `https://localhost:8443`. Point them at genesis with `AFHE_API_URL=https://api.afhe.io:8443`.
 
 ### TypeScript
 
@@ -54,7 +54,7 @@ console.log(await fhe.decryptInt(sum)) // "42"
 ### Go
 
 ```bash
-go get github.com/aurafhe/fhe-client/clients/go
+go get github.com/aurafhe/mcp/clients/go
 ```
 
 ```go
@@ -90,9 +90,11 @@ fhe add int "$(cat a.ct)" "$(cat b.ct)" | fhe dec int
 
 ---
 
-## 3. Generate and load keys
+## 3. Operators: keys
 
-Recommended keygen profile:
+MCP users do not generate keys. Genesis already has them loaded.
+
+Local coprocessor operators: [KEY_MANAGEMENT.md](KEY_MANAGEMENT.md). Recommended profile:
 
 ```json
 {
@@ -104,28 +106,17 @@ Recommended keygen profile:
 }
 ```
 
-See [KEY_MANAGEMENT.md](KEY_MANAGEMENT.md) for the exact request bodies and
-loading flow.
-
 ---
 
 ## 4. Common pitfalls
 
 ### TLS errors on localhost
 
-The SDK auto-trusts self-signed certificates only for `localhost`. If you point
-at another host, install a valid certificate or opt into insecure TLS
-explicitly.
+The SDK auto-trusts self-signed certificates for `localhost` and the genesis host `api.afhe.io`. If you point at another host, install a valid certificate or opt into insecure TLS explicitly.
 
-### Keys not loaded
+### Keys not loaded (local node)
 
-`connect()` auto-loads:
-
-- `file/skb`
-- `file/pkb`
-- `file/dictb`
-
-If your files live elsewhere, pass explicit key paths.
+`connect()` auto-loads `file/skb`, `file/pkb`, `file/dictb` on the **server**. If your files live elsewhere, pass explicit key paths.
 
 ### Domain mismatch
 
@@ -135,7 +126,7 @@ Do not mix `int`, `float`, `string`, and `binary` ciphertexts in one operation.
 
 ## Next steps
 
+- Story: [STORY.md](STORY.md)
 - Examples: [`examples/`](../examples/)
 - Protocol: [PROTOCOL.md](PROTOCOL.md)
-- Key custody: [KEY_MANAGEMENT.md](KEY_MANAGEMENT.md)
 - Architecture: [ARCHITECTURE.md](ARCHITECTURE.md)

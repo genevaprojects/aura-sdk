@@ -5,7 +5,7 @@ Two questions matter:
 1. What is this repo?
 2. How does an AI agent run private compute?
 
-This document answers both.
+This document answers both. Read [STORY.md](STORY.md) first.
 
 ## What this repo is
 
@@ -54,6 +54,8 @@ console.log(await fhe.decryptInt(sum)) // "3"
 ### Go
 
 ```go
+import afhe "github.com/aurafhe/mcp/clients/go"
+
 fhe, _ := afhe.Connect(ctx)
 a, _ := fhe.EncryptInt(ctx, "2")
 b, _ := fhe.EncryptInt(ctx, "1")
@@ -135,8 +137,9 @@ truth.
 
 ## Suggested reading order
 
-1. [QUICKSTART.md](QUICKSTART.md)
-2. [KEY_MANAGEMENT.md](KEY_MANAGEMENT.md)
-3. [PROTOCOL.md](PROTOCOL.md)
-4. [ARCHITECTURE.md](ARCHITECTURE.md)
-5. [SECURITY.md](../SECURITY.md)
+1. [STORY.md](STORY.md)
+2. [QUICKSTART.md](QUICKSTART.md)
+3. [ARCHITECTURE.md](ARCHITECTURE.md)
+4. [PROTOCOL.md](PROTOCOL.md)
+5. [KEY_MANAGEMENT.md](KEY_MANAGEMENT.md) (operators)
+6. [SECURITY.md](../SECURITY.md)

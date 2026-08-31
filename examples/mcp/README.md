@@ -17,7 +17,7 @@ Paste this. It uses the hosted coprocessor. No local server.
 claude mcp add aura -- npx -y @aurafhe/mcp
 ```
 
-Until npm publish: `npx -y github:genevaprojects/aura-sdk`
+Until npm publish: `npx -y github:aurafhe/mcp` (fallback: `npx -y github:genevaprojects/aura-sdk`)
 
-Create org, npm, DNS, TLS: [docs/LAUNCH.md](../../docs/LAUNCH.md)
+Story: [docs/STORY.md](../../docs/STORY.md). Launch: [docs/LAUNCH.md](../../docs/LAUNCH.md)
 

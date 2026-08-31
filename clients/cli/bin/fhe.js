@@ -53,7 +53,7 @@ Compute (any operation listed by 'fhe functions'):
 
 Global flags (override the saved config):
   --url URL          Server base URL (default: $AFHE_API_URL or https://localhost:8443)
-  --insecure         Accept self-signed TLS (auto-on for localhost)
+  --insecure         Accept self-signed TLS (auto-on for localhost and api.afhe.io)
   --no-autoload      Don't auto-load keys
   --quiet            Print result only, no trailing newline
   --help, -h         Show this help

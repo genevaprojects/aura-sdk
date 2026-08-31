@@ -35,6 +35,7 @@ else
 fi
 if gh api "repos/$ORG/$REPO" >/dev/null 2>&1; then
   ok "github.com/$ORG/$REPO exists"
+  todo "push this checkout: git remote add aurafhe https://github.com/$ORG/$REPO.git && git push -u aurafhe HEAD:main"
 else
   todo "after the org exists, run:"
   printf '        gh repo create %s/%s --public --source %s --remote aurafhe --push\n' "$ORG" "$REPO" "$ROOT"

@@ -58,8 +58,7 @@ jobs:
           go-version: "1.21"
       - run: go build ./...
       - run: go vet ./...
-      # Live tests are skipped here; they need a running coprocessor.
-      # Compile-only check above is enough for CI.
+      - run: go test -count=1 -run TestTrustTLS ./...
 
   python:
     name: Python client

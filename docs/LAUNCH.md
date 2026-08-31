@@ -63,7 +63,14 @@ gh api orgs/aurafhe --jq .login
 
 ## 2 · Repo `aurafhe/mcp`
 
-From this checkout, after the org exists:
+If the empty `aurafhe/mcp` repo already exists (Create repository, no README):
+
+```bash
+git remote add aurafhe https://github.com/aurafhe/mcp.git
+git push -u aurafhe HEAD:main
+```
+
+Or create it from this checkout:
 
 ```bash
 gh repo create aurafhe/mcp --public --source . --remote aurafhe --push

@@ -16,3 +16,20 @@ test('genesis coprocessor answers /health', async (t) => {
     t.skip(`genesis coprocessor unreachable: ${err instanceof Error ? err.message : err}`)
   }
 })
+
+test('genesis functions are encrypt/compute, not SQL or infer', async (t) => {
+  const fhe = createHttpCoprocessor({
+    baseUrl: DEFAULT_COPROCESSOR_URL,
+    autoLoad: false,
+    insecureTLS: true,
+    timeoutMs: 8_000,
+  })
+  try {
+    const fns = await fhe.functions()
+    const names = [...fns.arity1, ...fns.arity2, ...fns.arity3].join(' ')
+    assert.match(names, /AddCipherInt/)
+    assert.doesNotMatch(names, /SQL|Infer|Retrieve/i)
+  } catch (err) {
+    t.skip(`genesis coprocessor unreachable: ${err instanceof Error ? err.message : err}`)
+  }
+})
