@@ -24,6 +24,9 @@ That is the whole install. No localhost, no SDK rebuild, no key files in chat.
 
 Default network: [`https://api.afhe.io:8443`](https://api.afhe.io:8443/health)
 
+To stand up the GitHub org, npm package, TLS, and hosted URL, follow **[docs/LAUNCH.md](docs/LAUNCH.md)** or run `bash scripts/launch.sh`.
+
+
 ---
 
 ## The story

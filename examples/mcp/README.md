@@ -18,3 +18,6 @@ claude mcp add aura -- npx -y @aurafhe/mcp
 ```
 
 Until npm publish: `npx -y github:genevaprojects/aura-sdk`
+
+Create org, npm, DNS, TLS: [docs/LAUNCH.md](../../docs/LAUNCH.md)
+

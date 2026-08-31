@@ -22,6 +22,23 @@ async function main() {
     const port = Number(idx >= 0 ? process.argv[idx + 1] : process.env.PORT ?? 8787)
     const handler = createMcpHandler(factory)
     createServer((req, res) => {
+      res.setHeader('Access-Control-Allow-Origin', '*')
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS')
+      res.setHeader(
+        'Access-Control-Allow-Headers',
+        'content-type, accept, mcp-session-id, mcp-protocol-version, last-event-id',
+      )
+      if (req.method === 'OPTIONS') {
+        res.writeHead(204)
+        res.end()
+        return
+      }
+      const path = req.url?.split('?')[0] ?? '/'
+      if (req.method === 'GET' && (path === '/healthz' || path === '/health')) {
+        res.writeHead(200, { 'content-type': 'application/json' })
+        res.end(JSON.stringify({ status: 'ok', service: 'aura-mcp' }))
+        return
+      }
       const chunks: Buffer[] = []
       req.on('data', (chunk) => chunks.push(chunk as Buffer))
       req.on('end', () => {

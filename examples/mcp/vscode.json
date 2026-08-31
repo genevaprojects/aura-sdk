@@ -1,0 +1,8 @@
+{
+  "servers": {
+    "aura": {
+      "command": "npx",
+      "args": ["-y", "@aurafhe/mcp"]
+    }
+  }
+}
