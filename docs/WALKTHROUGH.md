@@ -3,15 +3,23 @@
 Two questions matter:
 
 1. What is this repo?
-2. What do I need for a working encrypted round-trip?
+2. How does an AI agent run private compute?
 
 This document answers both.
 
 ## What this repo is
 
-This repo contains client SDKs for the Aura FHE coprocessor.
+This repo is the **Aura FHE MCP connector** plus language SDKs for the same coprocessor.
 
-Every client speaks the same HTTP protocol:
+Agents connect with one line:
+
+```bash
+npx -y @aurafhe/mcp
+```
+
+The connector exposes private-compute tools (`fhe_private_eval`, `fhe_encrypt`, …).
+Apps that are not MCP hosts use TypeScript, Python, Go, or CLI clients. Every
+path speaks the same HTTP protocol:
 
 - `GET /health`
 - `GET /functions`
@@ -23,18 +31,12 @@ Every client speaks the same HTTP protocol:
 - `POST /call`
 - `POST /verify`
 
-Your app talks to the SDK. The SDK talks to the coprocessor. The coprocessor
-works on ciphertext.
+The agent talks to MCP. MCP talks to the coprocessor. The coprocessor evaluates
+sealed values. Read [AI_FHE.md](AI_FHE.md) first if you are wiring an agent.
 
 ## Key custody
 
-Three key blocks matter:
-
-- `SKB`: secret key block, required to decrypt
-- `PKB`: public key block, required for public-key encryption
-- `DictB`: evaluation block, required for homomorphic computation
-
-Keep `SKB` with the data owner.
+Keep decrypt with the data owner. The agent only sees plaintext when a tool is told to `reveal`. Operators who load key material: [KEY_MANAGEMENT.md](KEY_MANAGEMENT.md).
 
 ## The few lines
 

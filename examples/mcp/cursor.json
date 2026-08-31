@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "aura-fhe": {
+      "command": "npx",
+      "args": ["-y", "@aurafhe/mcp"],
+      "env": {
+        "AFHE_API_URL": "https://localhost:8443"
+      }
+    }
+  }
+}

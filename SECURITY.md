@@ -21,6 +21,11 @@ Please do not open public issues for security reports.
 - plaintext values
 - encrypted intermediate state
 - encrypted outputs
+- the agent's prompt, when you keep values sealed and only reveal the final result
+
+## MCP connector
+
+`npx -y @aurafhe/mcp` talks to the coprocessor. Do not put secret key material in MCP env vars or chat. `AFHE_API_KEY` is an access token for the coprocessor HTTP API, not the FHE secret.
 
 ## What FHE does not protect by itself
 

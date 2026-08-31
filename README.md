@@ -1,159 +1,181 @@
-# Aura FHE SDK
+# Aura FHE
 
-HTTP clients for the Aura FHE coprocessor.
+Private compute for AI agents. One line:
 
-This repo is SDK-only: TypeScript, Go, Python, and CLI clients that all speak
-the same HTTPS+JSON protocol.
+```bash
+npx -y @aurafhe/mcp
+```
 
-> Start with [WALKTHROUGH](docs/WALKTHROUGH.md), then keep
-> [QUICKSTART](docs/QUICKSTART.md) open beside your editor.
+That starts an [MCP](https://modelcontextprotocol.io) connector. Cursor, Claude, VS Code, and any other MCP host can then encrypt values, evaluate them without reading plaintext, and decrypt only the final answer.
+
+```json
+{
+  "mcpServers": {
+    "aura-fhe": {
+      "command": "npx",
+      "args": ["-y", "@aurafhe/mcp"],
+      "env": {
+        "AFHE_API_URL": "https://localhost:8443"
+      }
+    }
+  }
+}
+```
+
+```bash
+claude mcp add aura-fhe -- npx -y @aurafhe/mcp
+```
+
+Point `AFHE_API_URL` at your Aura FHE coprocessor. That is the whole setup.
 
 ---
 
-## Quickstart
+## Why this exists
 
-### TypeScript
+Language models should be able to **compute on private data** without the data becoming part of the prompt.
+
+Aura FHE is fully homomorphic evaluation for AI workflows:
+
+1. Seal inputs (`fhe_encrypt` or `fhe_private_eval`)
+2. Run math, stats, comparisons, or string ops on sealed values
+3. Reveal only the result the user asked for (`reveal: true`)
+
+The model sees short handles (`ct_1`), not plaintext and not giant ciphertext blobs.
+
+## Tools the agent gets
+
+| Tool | Use it for |
+|---|---|
+| `fhe_status` | Is private compute reachable? |
+| `fhe_ops` | Which ops this coprocessor can run |
+| `fhe_private_eval` | **Main AI path.** Seal → evaluate → optional reveal |
+| `fhe_encrypt` | Keep a sealed value around as `ct_…` |
+| `fhe_compute` | Run an op on handles (and optional extra plaintext) |
+| `fhe_decrypt` | Reveal a handle when the user asked for the answer |
+
+Example agent call:
+
+```json
+{
+  "name": "fhe_private_eval",
+  "arguments": {
+    "domain": "int",
+    "op": "mean",
+    "values": [81, 94, 73],
+    "reveal": true
+  }
+}
+```
+
+The coprocessor sees the numbers. The chat transcript does not need to.
+
+## Install on every host
+
+### Cursor
+
+Project file `.cursor/mcp.json` or user file `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "aura-fhe": {
+      "command": "npx",
+      "args": ["-y", "@aurafhe/mcp"],
+      "env": {
+        "AFHE_API_URL": "https://localhost:8443"
+      }
+    }
+  }
+}
+```
+
+### Claude Code / Claude Desktop
 
 ```bash
-npm install @aura/fhe-client
+claude mcp add aura-fhe -- npx -y @aurafhe/mcp
 ```
+
+Same JSON works in Claude Desktop MCP settings.
+
+### VS Code Copilot
+
+```json
+{
+  "servers": {
+    "aura-fhe": {
+      "command": "npx",
+      "args": ["-y", "@aurafhe/mcp"],
+      "env": {
+        "AFHE_API_URL": "https://localhost:8443"
+      }
+    }
+  }
+}
+```
+
+### Remote HTTP (one shared endpoint)
+
+```bash
+npx -y @aurafhe/mcp --http --port 8787
+```
+
+```json
+{
+  "mcpServers": {
+    "aura-fhe": {
+      "url": "http://127.0.0.1:8787/mcp"
+    }
+  }
+}
+```
+
+### From this repo before npm publish
+
+```bash
+npx -y github:genevaprojects/aura-sdk
+```
+
+## Environment
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `AFHE_API_URL` | `https://localhost:8443` | Coprocessor base URL |
+| `AFHE_API_KEY` | — | Optional `Authorization: Bearer` |
+| `AFHE_TIMEOUT_MS` | `120000` | Per-request timeout |
+| `AFHE_INSECURE_TLS` | localhost only | Set `1` to trust a self-signed cert on a non-local host |
+
+Localhost TLS is trusted automatically so a local coprocessor works without extra flags.
+
+## Language SDKs (optional)
+
+If you are writing an app instead of wiring an agent, the same coprocessor speaks HTTPS+JSON:
 
 ```ts
 import { connect } from '@aura/fhe-client'
 
 const fhe = await connect()
-const a = await fhe.encryptInt(25)
-const b = await fhe.encryptInt(17)
-const sum = await fhe.addInt(a, b)
-
+const sum = await fhe.addInt(await fhe.encryptInt(25), await fhe.encryptInt(17))
 console.log(await fhe.decryptInt(sum)) // "42"
 ```
 
-### Go
+| Client | Install |
+|---|---|
+| TypeScript | `npm install @aura/fhe-client` |
+| Python | `pip install aura-fhe` |
+| Go | `go get github.com/aurafhe/fhe-client/clients/go` |
+| CLI | `npm install -g @aura/fhe-cli` |
+
+Walkthrough: [docs/AI_FHE.md](docs/AI_FHE.md) · protocol: [docs/PROTOCOL.md](docs/PROTOCOL.md)
+
+## Develop
 
 ```bash
-go get github.com/aurafhe/fhe-client/clients/go
+npm install
+npm test
+npm run inspector
 ```
 
-```go
-import afhe "github.com/aurafhe/fhe-client/clients/go"
-
-c, _ := afhe.Connect(ctx)
-a, _ := c.EncryptInt(ctx, "25")
-b, _ := c.EncryptInt(ctx, "17")
-sum, _ := c.AddInt(ctx, a, b)
-pt, _ := c.DecryptInt(ctx, sum)
-
-fmt.Println(pt) // "42"
-```
-
-### Python
-
-```bash
-pip install aura-fhe
-```
-
-```python
-from aura_fhe import connect
-
-fhe = connect()
-a = fhe.encrypt_int(25)
-b = fhe.encrypt_int(17)
-
-print(fhe.decrypt_int(fhe.add_int(a, b)))  # "42"
-```
-
-### CLI
-
-```bash
-npm install -g @aura/fhe-cli
-fhe connect
-fhe enc int 25 > a.ct
-fhe enc int 17 > b.ct
-fhe add int "$(cat a.ct)" "$(cat b.ct)" | fhe dec int
-```
-
----
-
-## What the SDK covers
-
-- Encrypt / decrypt for `int`, `float`, `string`, `binary`
-- Public-key encryption
-- Arithmetic, bitwise, compare, string, and scientific operations
-- Signing / verification
-- Generic escape hatch: `call(fn, args)`
-
-All clients expose the same protocol surface in language-idiomatic form.
-
----
-
-## Recommended keygen profile
-
-Use the same profile everywhere unless your deployment team tells you otherwise:
-
-```json
-{
-  "m": 2,
-  "n": 4,
-  "q": 2147483647,
-  "p": 512,
-  "delta": 0.001
-}
-```
-
-Full details: [docs/KEY_MANAGEMENT.md](docs/KEY_MANAGEMENT.md)
-
----
-
-## Repository layout
-
-```text
-clients/
-  typescript/   @aura/fhe-client
-  go/           github.com/aurafhe/fhe-client/clients/go
-  python/       aura-fhe
-  cli/          @aura/fhe-cli
-
-examples/
-  01-hello-fhe-node/
-  02-hello-fhe-go/
-  03-hello-fhe-python/
-  04-browser/
-  05-cli/
-  06-secure-sum/
-
-docs/
-  QUICKSTART.md
-  WALKTHROUGH.md
-  PROTOCOL.md
-  KEY_MANAGEMENT.md
-  ARCHITECTURE.md
-  SECURITY.md
-```
-
----
-
-## Running against a server
-
-Point the SDK at any compatible Aura FHE coprocessor:
-
-- local default: `https://localhost:8443`
-- override with `AFHE_API_URL`
-- or pass `baseUrl` / `BaseURL` / `base_url`
-
-`connect()` also auto-loads the standard key paths by default:
-
-- `file/skb`
-- `file/pkb`
-- `file/dictb`
-
----
-
-## Links
-
-- Docs: [docs.afhe.io](https://docs.afhe.io)
-- Project: [afhe.io](https://afhe.io)
-- Issues: [github.com/aurafhe/fhe-client/issues](https://github.com/aurafhe/fhe-client/issues)
+`npm run inspector` opens the MCP Inspector against this connector.
 
 ## License
 

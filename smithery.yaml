@@ -1,0 +1,23 @@
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties:
+      apiUrl:
+        type: string
+        description: Aura FHE coprocessor URL
+        default: https://localhost:8443
+      apiKey:
+        type: string
+        description: Optional bearer token for the coprocessor
+  commandFunction: |-
+    (config) => ({
+      command: 'node',
+      args: ['dist/index.js'],
+      env: Object.fromEntries(
+        Object.entries({
+          AFHE_API_URL: config.apiUrl || 'https://localhost:8443',
+          AFHE_API_KEY: config.apiKey || undefined,
+        }).filter(([, value]) => value != null)
+      ),
+    })

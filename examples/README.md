@@ -7,6 +7,7 @@ your preferred Aura FHE server or point them at any other URL via the
 
 | # | Folder | Language | What it shows |
 |---|---|---|---|
+| — | [mcp](./mcp/) | MCP | One-line connect for Cursor / Claude / VS Code |
 | 01 | [01-hello-fhe-node](./01-hello-fhe-node/) | Node.js | Encrypt → add → decrypt |
 | 02 | [02-hello-fhe-go](./02-hello-fhe-go/) | Go | Same demo, Go |
 | 03 | [03-hello-fhe-python](./03-hello-fhe-python/) | Python | Same demo, Python |

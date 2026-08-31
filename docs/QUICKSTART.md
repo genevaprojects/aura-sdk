@@ -1,31 +1,38 @@
 # Quickstart
 
-Five minutes from clone to first decrypted result.
+Private AI compute in one line, then optional language SDKs.
 
----
+## 1. Connect the MCP connector
 
-## 1. Point at a coprocessor
+```bash
+npx -y @aurafhe/mcp
+```
 
-You need a compatible Aura FHE coprocessor reachable over HTTPS.
+Or add it to Cursor / Claude / VS Code. Snippets: [`examples/mcp`](../examples/mcp/).
 
-By default every client uses:
+You need a compatible Aura FHE coprocessor. Default URL:
 
 ```text
 https://localhost:8443
 ```
 
-Health check:
-
 ```bash
 curl -k https://localhost:8443/health
 ```
 
-You can also override the URL with `AFHE_API_URL` or a client-specific `baseUrl`
-option.
+Override with `AFHE_API_URL`.
+
+Ask the agent:
+
+> Use Aura FHE to privately add 25 and 17 and tell me the result.
+
+It should call `fhe_private_eval` and return `42`.
 
 ---
 
-## 2. Pick a client
+## 2. Optional: language SDKs
+
+Same coprocessor, for apps that are not MCP hosts.
 
 ### TypeScript
 

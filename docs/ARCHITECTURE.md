@@ -1,72 +1,34 @@
 # Architecture
 
-Four layers, one stable contract.
-
 ```text
-Application
+AI agent (Cursor, Claude, VS Code, …)
+  ↓  MCP  (npx -y @aurafhe/mcp)
+Aura FHE connector
+  ↓  HTTPS + JSON
+Coprocessor
   ↓
-Client SDK (this repo)
-  ↓
-Aura FHE HTTP protocol
-  ↓
-Coprocessor server
-  ↓
-Cryptographic engine
+Private evaluation engine
 ```
 
-## Layer 3 — Application
+The connector is the product. Language SDKs in `clients/` are the same protocol for apps that are not MCP hosts.
 
-Your code calls language-native helpers such as:
+## What the agent sees
 
-- `encryptInt`
-- `addInt`
-- `decryptInt`
-- `verify`
+Tools, not key files:
 
-The application does not need to know the raw HTTP routes.
+- `fhe_status` / `fhe_ops`
+- `fhe_private_eval` — one-shot private compute
+- `fhe_encrypt` / `fhe_compute` / `fhe_decrypt` — multi-step graphs with `ct_…` handles
 
-## Layer 2 — Client SDK
+Handles live in the MCP process. Ciphertext does not have to round-trip through the prompt.
 
-This repo contains:
+## What the coprocessor sees
 
-- TypeScript
-- Go
-- Python
-- CLI
+The HTTP contract in [PROTOCOL.md](PROTOCOL.md): health, encrypt, decrypt, generic `call`. The connector maps AI op names (`add`, `mean`, `concat`) onto that contract.
 
-Each client does the same jobs:
+## Why the split
 
-1. speaks the Aura FHE HTTP protocol
-2. provides typed helpers for common operations
-3. exposes `connect()` for fast startup
-4. exposes `call(fn, args)` as the escape hatch
-
-## Layer 1 — Coprocessor server
-
-The coprocessor owns the loaded key material for the running process and
-exposes the protocol routes:
-
-- `/health`
-- `/functions`
-- `/init`
-- `/keygen`
-- `/load`
-- `/encrypt/{domain}`
-- `/decrypt/{domain}`
-- `/call`
-- `/verify`
-
-The server is the boundary between application code and FHE execution.
-
-## Layer 0 — Cryptographic engine
-
-The cryptographic engine performs the actual FHE operations over ciphertexts.
-It is hidden behind the coprocessor API.
-
-## Why the layering matters
-
-- clients can evolve without changing app code
-- server builds can change without changing the wire contract
-- new SDKs only need the HTTP protocol, not private implementation details
-- key custody stays explicit: `SKB` with the data owner, `PKB` and `DictB` on
-  the compute side
+- hosts speak MCP
+- apps speak the TypeScript / Python / Go / CLI clients
+- the coprocessor can change implementation as long as the HTTP contract holds
+- decrypt stays with the data owner; the model only receives plaintext when a tool is told to reveal

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
+  "name": "io.github.genevaprojects/aura-fhe",
+  "title": "Aura FHE",
+  "description": "Private AI compute over fully homomorphic evaluation. One-line MCP connector for Cursor, Claude, and VS Code.",
+  "repository": {
+    "url": "https://github.com/genevaprojects/aura-sdk",
+    "source": "github"
+  },
+  "version": "0.4.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@aurafhe/mcp",
+      "version": "0.4.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "AFHE_API_URL",
+          "description": "Aura FHE coprocessor base URL",
+          "isRequired": false,
+          "format": "string"
+        },
+        {
+          "name": "AFHE_API_KEY",
+          "description": "Optional bearer token",
+          "isRequired": false,
+          "format": "string",
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
