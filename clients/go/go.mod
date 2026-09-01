@@ -1,3 +1,3 @@
-module github.com/aurafhe/fhe-client/clients/go
+module github.com/aurafhe-official/mcp/clients/go
 
 go 1.21

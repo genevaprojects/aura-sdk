@@ -5,6 +5,8 @@ yarn-debug.log*
 yarn-error.log*
 .pnp.*
 dist/
+!/dist/
+!/dist/**
 build/
 *.tsbuildinfo
 .next/

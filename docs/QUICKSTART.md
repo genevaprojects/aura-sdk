@@ -1,31 +1,38 @@
 # Quickstart
 
-Five minutes from clone to first decrypted result.
+Add the MCP server, then optional language SDKs. Story: [STORY.md](STORY.md).
 
----
-
-## 1. Point at a coprocessor
-
-You need a compatible Aura FHE coprocessor reachable over HTTPS.
-
-By default every client uses:
-
-```text
-https://localhost:8443
-```
-
-Health check:
+## 1. Add the MCP server
 
 ```bash
-curl -k https://localhost:8443/health
+npx -y github:aurafhe-official/mcp
 ```
 
-You can also override the URL with `AFHE_API_URL` or a client-specific `baseUrl`
-option.
+Or add it to Cursor / Claude / VS Code. Snippets: [`examples/mcp`](../examples/mcp/).
+
+Default network is genesis compute:
+
+```text
+https://api.afhe.io:8443
+```
+
+```bash
+curl -k https://api.afhe.io:8443/health
+```
+
+Override with `AFHE_API_URL` only for a local node.
+
+Ask the agent:
+
+> Use Aura FHE to privately add 25 and 17 and tell me the result.
+
+It should call `fhe_private_eval` and return `42`.
 
 ---
 
-## 2. Pick a client
+## 2. Optional: language SDKs
+
+Same coprocessor, for apps that are not MCP hosts. SDK `connect()` defaults to a **local** node at `https://localhost:8443`. Point them at genesis with `AFHE_API_URL=https://api.afhe.io:8443`.
 
 ### TypeScript
 
@@ -47,7 +54,7 @@ console.log(await fhe.decryptInt(sum)) // "42"
 ### Go
 
 ```bash
-go get github.com/aurafhe/fhe-client/clients/go
+go get github.com/aurafhe-official/mcp/clients/go
 ```
 
 ```go
@@ -83,9 +90,11 @@ fhe add int "$(cat a.ct)" "$(cat b.ct)" | fhe dec int
 
 ---
 
-## 3. Generate and load keys
+## 3. Operators: keys
 
-Recommended keygen profile:
+MCP users do not generate keys. Genesis already has them loaded.
+
+Local coprocessor operators: [KEY_MANAGEMENT.md](KEY_MANAGEMENT.md). Recommended profile:
 
 ```json
 {
@@ -97,28 +106,17 @@ Recommended keygen profile:
 }
 ```
 
-See [KEY_MANAGEMENT.md](KEY_MANAGEMENT.md) for the exact request bodies and
-loading flow.
-
 ---
 
 ## 4. Common pitfalls
 
 ### TLS errors on localhost
 
-The SDK auto-trusts self-signed certificates only for `localhost`. If you point
-at another host, install a valid certificate or opt into insecure TLS
-explicitly.
+The SDK auto-trusts self-signed certificates for `localhost` and the genesis host `api.afhe.io`. If you point at another host, install a valid certificate or opt into insecure TLS explicitly.
 
-### Keys not loaded
+### Keys not loaded (local node)
 
-`connect()` auto-loads:
-
-- `file/skb`
-- `file/pkb`
-- `file/dictb`
-
-If your files live elsewhere, pass explicit key paths.
+`connect()` auto-loads `file/skb`, `file/pkb`, `file/dictb` on the **server**. If your files live elsewhere, pass explicit key paths.
 
 ### Domain mismatch
 
@@ -128,7 +126,7 @@ Do not mix `int`, `float`, `string`, and `binary` ciphertexts in one operation.
 
 ## Next steps
 
+- Story: [STORY.md](STORY.md)
 - Examples: [`examples/`](../examples/)
 - Protocol: [PROTOCOL.md](PROTOCOL.md)
-- Key custody: [KEY_MANAGEMENT.md](KEY_MANAGEMENT.md)
 - Architecture: [ARCHITECTURE.md](ARCHITECTURE.md)

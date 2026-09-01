@@ -4,7 +4,7 @@ Standard library only. Works against any server that speaks the Aura FHE
 protocol (`docs/PROTOCOL.md`).
 
 ```bash
-go get github.com/aurafhe/fhe-client/clients/go
+go get github.com/aurafhe-official/mcp/clients/go
 ```
 
 ```go
@@ -15,12 +15,12 @@ import (
     "fmt"
     "log"
 
-    afhe "github.com/aurafhe/fhe-client/clients/go"
+    afhe "github.com/aurafhe-official/mcp/clients/go"
 )
 
 func main() {
     ctx := context.Background()
-    fhe, err := afhe.Connect(ctx)                  // localhost:8443, self-signed TLS ok, keys loaded
+    fhe, err := afhe.Connect(ctx)                  // localhost:8443; genesis via $AFHE_API_URL
     if err != nil { log.Fatal(err) }
 
     a, _   := fhe.EncryptInt(ctx, "25")
@@ -38,7 +38,7 @@ func main() {
 | Option | Default | Notes |
 |---|---|---|
 | `BaseURL` | `$AFHE_API_URL` or `https://localhost:8443` | Server URL |
-| `InsecureTLS` | `true` iff host is localhost | Pass `afhe.Bool(true)` to force on other hosts |
+| `InsecureTLS` | `true` for localhost and `api.afhe.io` | Pass `afhe.Bool(true)` to force on other hosts |
 | `AutoLoad` | `true` | Server-side `POST /load` with the standard key paths |
 | `Keys` | `file/skb` / `file/pkb` / `file/dictb` | Override individual paths |
 | `HealthCheck` | `true` | Probe `GET /health` before returning |

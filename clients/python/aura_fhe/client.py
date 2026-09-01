@@ -261,12 +261,11 @@ def connect(
     """Connect to an Aura FHE coprocessor and return a ready-to-use client.
 
     Reads ``$AFHE_API_URL`` from the environment when ``base_url`` is ``None``.
-    Tolerates the self-signed certificate that the reference local server
-    ships with, but only for localhost / 127.0.0.1.
+    Relaxes TLS for localhost and genesis (``api.afhe.io``).
     """
     url = base_url or os.getenv("AFHE_API_URL") or DEFAULT_BASE_URL
     if insecure_tls is None:
-        insecure_tls = _is_localhost(url)
+        insecure_tls = _trust_tls(url)
 
     client = AfheClient(
         base_url=url,
@@ -298,9 +297,9 @@ def connect(
     return client
 
 
-def _is_localhost(rawurl: str) -> bool:
+def _trust_tls(rawurl: str) -> bool:
     try:
         host = urlparse(rawurl).hostname or ""
     except Exception:
         return False
-    return host in {"localhost", "127.0.0.1", "::1"} or host.endswith(".localhost")
+    return host in {"localhost", "127.0.0.1", "::1", "api.afhe.io"} or host.endswith(".localhost")

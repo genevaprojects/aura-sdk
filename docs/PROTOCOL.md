@@ -4,7 +4,7 @@ The Aura FHE coprocessor speaks JSON over HTTPS. Every client in this repo is a
 thin wrapper around the endpoints below. If your favourite language is not here
 yet, copy this document and you have an SDK.
 
-Base URL convention: `https://<host>:8443`.
+Production network: `https://api.afhe.io:8443`. Local operators: `https://localhost:8443`.
 
 ---
 
