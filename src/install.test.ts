@@ -38,5 +38,7 @@ describe('anyone can add this MCP', () => {
     const readme = read('README.md')
     assert.match(readme, /github:aurafhe-official\/mcp/)
     assert.match(readme, /mcpServers/)
+    assert.ok(existsSync(join(root, 'docs/assets/aura.png')))
+    assert.ok(existsSync(join(root, 'docs/assets/social.png')))
   })
 })

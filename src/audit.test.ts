@@ -44,6 +44,7 @@ describe('repo audit — Encrypted MCP product surface', () => {
     assert.match(readme, /@aurafhe\/mcp/)
     assert.match(readme, /github\.com\/aurafhe-official\/mcp/)
     assert.match(readme, /agent/i)
+    assert.match(readme, /docs\/assets\/aura\.png/)
   })
 
   test('canonical files point at aurafhe-official/mcp', () => {

@@ -1,6 +1,18 @@
-# AURA MCP
+<p align="center">
+  <img src="docs/assets/aura.png" width="220" alt="AURA">
+</p>
 
-An **MCP server** for private compute. Add it to Cursor, Claude, VS Code, or any MCP host. Your agent gets tools. The model never sees the data.
+<p align="center">
+  <b>MCP server for private compute</b><br>
+  Add it to Cursor, Claude, or any host. The model never sees the data.
+</p>
+
+<p align="center">
+  <a href="https://github.com/aurafhe-official/mcp"><img src="https://img.shields.io/badge/MCP-server-F5A623?style=flat-square&labelColor=111" alt="MCP"></a>
+  <a href="https://api.afhe.io:8443/health"><img src="https://img.shields.io/badge/genesis-live-2ea44f?style=flat-square&labelColor=111" alt="genesis live"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F5A623?style=flat-square&labelColor=111" alt="MIT"></a>
+  <a href="https://afhe.io"><img src="https://img.shields.io/badge/afhe.io-black?style=flat-square&labelColor=111" alt="afhe.io"></a>
+</p>
 
 ```json
 {
@@ -18,35 +30,64 @@ npx -y github:aurafhe-official/mcp
 claude mcp add aura -- npx -y github:aurafhe-official/mcp
 ```
 
-That is the whole install. No SDK. No keys in chat. No localhost. Works before npm publish.
+That is the whole install. Then ask the agent:
 
-Zero-config talks to genesis: [`https://api.afhe.io:8443`](https://api.afhe.io:8443/health)
+> Privately add 25 and 17.
+
+It should call `fhe_private_eval` and return `42`. No SDK. No keys in chat. No localhost.
 
 After `npm publish`, the same paste with `@aurafhe/mcp` also works.
 
 ---
 
-## Why this MCP
+<details>
+<summary><b>Cursor · Claude · VS Code</b></summary>
 
-Agents already speak **tools**. AURA is one more MCP server: the host seals inputs, the network computes, the agent only receives handles (`ct_…`) or the final answer.
+**Cursor** — `.cursor/mcp.json` or `~/.cursor/mcp.json`
 
-1. **Encrypt at the owner**
-2. **Compute on ciphertext**
-3. **Decrypt only at the recipient**
-
-Existing agents migrate in. No rebuild. Story: [docs/STORY.md](docs/STORY.md).
-
-```text
-Cursor · Claude · VS Code · any MCP host
-        ↓  MCP tools
-github:aurafhe-official/mcp
-        ↓  HTTPS
-AURA network
+```json
+{
+  "mcpServers": {
+    "aura": {
+      "command": "npx",
+      "args": ["-y", "github:aurafhe-official/mcp"]
+    }
+  }
+}
 ```
 
----
+**Claude Code**
 
-## Tools
+```bash
+claude mcp add aura -- npx -y github:aurafhe-official/mcp
+```
+
+**Claude Desktop** — paste [`examples/mcp/claude-desktop.json`](examples/mcp/claude-desktop.json) into `claude_desktop_config.json`.
+
+**VS Code Copilot** — `.vscode/mcp.json`
+
+```json
+{
+  "servers": {
+    "aura": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "github:aurafhe-official/mcp"]
+    }
+  }
+}
+```
+
+**HTTP** (one URL for a team)
+
+```bash
+npx -y github:aurafhe-official/mcp --http --port 8787
+```
+
+</details>
+
+<details>
+<summary><b>Tools the agent gets</b></summary>
 
 | Tool | What the agent uses it for |
 |---|---|
@@ -69,72 +110,32 @@ Live ops: add, mean, compare, concat, scientific. Retrieval, SQL, and inference 
 }
 ```
 
----
+</details>
 
-## Add to a host
+<details>
+<summary><b>Why MCP</b></summary>
 
-**Cursor** — `.cursor/mcp.json` or `~/.cursor/mcp.json`:
+Agents already speak **tools**. AURA is one more MCP server: the host seals inputs, the network computes, the agent only receives handles (`ct_…`) or the final answer.
 
-```json
-{
-  "mcpServers": {
-    "aura": {
-      "command": "npx",
-      "args": ["-y", "github:aurafhe-official/mcp"]
-    }
-  }
-}
-```
+1. Encrypt at the owner
+2. Compute on ciphertext
+3. Decrypt only at the recipient
 
-**Claude Code**
+Existing agents migrate in. No rebuild. Story: [docs/STORY.md](docs/STORY.md).
 
-```bash
-claude mcp add aura -- npx -y github:aurafhe-official/mcp
-```
-
-**Claude Desktop** — `claude_desktop_config.json` (same `mcpServers` block as Cursor).
-
-**VS Code Copilot** — `.vscode/mcp.json`:
-
-```json
-{
-  "servers": {
-    "aura": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "github:aurafhe-official/mcp"]
-    }
-  }
-}
-```
-
-**HTTP** (one URL for a team):
-
-```bash
-npx -y github:aurafhe-official/mcp --http --port 8787
-```
-
-```json
-{
-  "mcpServers": {
-    "aura": { "url": "https://mcp.afhe.io/mcp" }
-  }
-}
-```
-
-Canonical repo: [github.com/aurafhe-official/mcp](https://github.com/aurafhe-official/mcp)
-
----
-
-## Environment (optional)
+Zero-config talks to genesis: [`https://api.afhe.io:8443`](https://api.afhe.io:8443/health)
 
 | Variable | Default | Purpose |
 |---|---|---|
-| `AFHE_API_URL` | `https://api.afhe.io:8443` | Backend for this MCP |
+| `AFHE_API_URL` | `https://api.afhe.io:8443` | Backend |
 | `AFHE_API_KEY` | — | Bearer token if required |
 | `AFHE_TIMEOUT_MS` | `120000` | Per-request timeout |
 | `AFHE_INSECURE_TLS` | genesis + localhost | Set `0` to require a valid certificate |
 
 Apps that are not MCP hosts: [`clients/`](clients/). Docs: [docs.afhe.io](https://docs.afhe.io)
 
-MIT · Mochi Labs · [gen@afhe.io](mailto:gen@afhe.io)
+</details>
+
+<p align="center">
+  MIT · Mochi Labs · <a href="mailto:gen@afhe.io">gen@afhe.io</a> · <a href="https://github.com/aurafhe-official/mcp">github.com/aurafhe-official/mcp</a>
+</p>

@@ -24,10 +24,14 @@ bash scripts/launch.sh
 | Surface | Value |
 |---|---|
 | GitHub | `https://github.com/aurafhe-official` (user, live) |
-| Repo | `https://github.com/aurafhe-official/mcp` (create empty) |
+| Repo | `https://github.com/aurafhe-official/mcp` (live) |
 | npm | `@aurafhe/mcp` |
 | Backend | `https://api.afhe.io:8443` (live) |
 | Hosted MCP | `https://mcp.afhe.io/mcp` (optional) |
+| Logo | `docs/assets/aura.png` |
+| Social preview | `docs/assets/social.png` |
+
+Repo About (Settings, as aurafhe-official): description `MCP server for private compute. One paste into Cursor, Claude, or any host.` · website `https://afhe.io` · social preview upload `docs/assets/social.png` · topics `mcp, mcp-server, ai, agents, fhe`. Profile photo: `docs/assets/aura-512.png`.
 
 This Cloud Agent cannot create the GitHub repo or publish npm from the `aurafhe-official` account. You can. One browser step, then push.
 
