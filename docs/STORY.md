@@ -17,12 +17,12 @@ AURA is an MCP server. Add it once. Every host that speaks MCP (Cursor, Claude, 
 ```text
 Cursor · Claude · VS Code · any MCP host
         ↓  MCP (tools)
-@aurafhe/mcp     ← this repository
+github:aurafhe-official/mcp     ← this repository
         ↓  HTTPS
 AURA network   https://api.afhe.io:8443
 ```
 
-Paste `@aurafhe/mcp`. Language SDKs in `clients/` are the same backend for apps that are not MCP hosts.
+Paste `npx -y github:aurafhe-official/mcp`. Language SDKs in `clients/` are the same backend for apps that are not MCP hosts.
 
 ## What ships today
 

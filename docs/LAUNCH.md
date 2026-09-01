@@ -1,13 +1,13 @@
 # Launch AURA MCP
 
-GitHub account [aurafhe-official](https://github.com/aurafhe-official) already exists. npm package users paste: `@aurafhe/mcp`.
+GitHub account [aurafhe-official](https://github.com/aurafhe-official) already exists. Anyone pastes `github:aurafhe-official/mcp`. npm alias later: `@aurafhe/mcp`.
 
 ```json
 {
   "mcpServers": {
     "aura": {
       "command": "npx",
-      "args": ["-y", "@aurafhe/mcp"]
+      "args": ["-y", "github:aurafhe-official/mcp"]
     }
   }
 }

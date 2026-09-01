@@ -3,7 +3,7 @@
 An MCP server. Agents use tools. The model never sees the data.
 
 ```text
-Agent  --MCP-->  npx @aurafhe/mcp  --HTTPS-->  api.afhe.io:8443
+Agent  --MCP-->  npx github:aurafhe-official/mcp  --HTTPS-->  api.afhe.io:8443
 ```
 
 1. `fhe_status` — is this MCP online?

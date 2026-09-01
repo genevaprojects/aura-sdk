@@ -5,7 +5,7 @@ Add the MCP server, then optional language SDKs. Story: [STORY.md](STORY.md).
 ## 1. Add the MCP server
 
 ```bash
-npx -y @aurafhe/mcp
+npx -y github:aurafhe-official/mcp
 ```
 
 Or add it to Cursor / Claude / VS Code. Snippets: [`examples/mcp`](../examples/mcp/).

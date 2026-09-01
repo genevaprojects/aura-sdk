@@ -11,7 +11,7 @@ async function main() {
     }
     catch (err) {
         const message = err instanceof Error ? err.message : String(err);
-        console.error(`Aura FHE: coprocessor not ready (${message}). Tools will retry on call.`);
+        console.error(`AURA MCP: backend not ready (${message}). Tools will retry on call.`);
     }
     const session = new FheSession(coprocessor);
     const factory = () => createFheServer(session);

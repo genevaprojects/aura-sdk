@@ -2,7 +2,7 @@
 
 ```text
 MCP host (Cursor, Claude, VS Code, …)
-  ↓  MCP tools   npx -y @aurafhe/mcp
+  ↓  MCP tools   npx -y github:aurafhe-official/mcp
 AURA MCP server
   ↓  HTTPS + JSON
 Private-compute network

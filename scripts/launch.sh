@@ -56,7 +56,7 @@ cat <<'JSON'
   "mcpServers": {
     "aura": {
       "command": "npx",
-      "args": ["-y", "@aurafhe/mcp"]
+      "args": ["-y", "github:aurafhe-official/mcp"]
     }
   }
 }

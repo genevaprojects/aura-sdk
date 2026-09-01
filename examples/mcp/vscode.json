@@ -1,8 +1,9 @@
 {
   "servers": {
     "aura": {
+      "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@aurafhe/mcp"]
+      "args": ["-y", "github:aurafhe-official/mcp"]
     }
   }
 }

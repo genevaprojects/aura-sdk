@@ -14,7 +14,7 @@ This repo is an **MCP server** (`@aurafhe/mcp`) plus language SDKs for the same 
 Agents add one MCP:
 
 ```bash
-npx -y @aurafhe/mcp
+npx -y github:aurafhe-official/mcp
 ```
 
 The server exposes private-compute tools (`fhe_private_eval`, `fhe_encrypt`, …).

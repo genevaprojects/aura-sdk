@@ -7,20 +7,22 @@ An **MCP server** for private compute. Add it to Cursor, Claude, VS Code, or any
   "mcpServers": {
     "aura": {
       "command": "npx",
-      "args": ["-y", "@aurafhe/mcp"]
+      "args": ["-y", "github:aurafhe-official/mcp"]
     }
   }
 }
 ```
 
 ```bash
-npx -y @aurafhe/mcp
-claude mcp add aura -- npx -y @aurafhe/mcp
+npx -y github:aurafhe-official/mcp
+claude mcp add aura -- npx -y github:aurafhe-official/mcp
 ```
 
-That is the whole install. No SDK. No keys in chat. No localhost.
+That is the whole install. No SDK. No keys in chat. No localhost. Works before npm publish.
 
 Zero-config talks to genesis: [`https://api.afhe.io:8443`](https://api.afhe.io:8443/health)
+
+After `npm publish`, the same paste with `@aurafhe/mcp` also works.
 
 ---
 
@@ -37,7 +39,7 @@ Existing agents migrate in. No rebuild. Story: [docs/STORY.md](docs/STORY.md).
 ```text
 Cursor · Claude · VS Code · any MCP host
         ↓  MCP tools
-@aurafhe/mcp
+github:aurafhe-official/mcp
         ↓  HTTPS
 AURA network
 ```
@@ -78,7 +80,7 @@ Live ops: add, mean, compare, concat, scientific. Retrieval, SQL, and inference 
   "mcpServers": {
     "aura": {
       "command": "npx",
-      "args": ["-y", "@aurafhe/mcp"]
+      "args": ["-y", "github:aurafhe-official/mcp"]
     }
   }
 }
@@ -87,8 +89,10 @@ Live ops: add, mean, compare, concat, scientific. Retrieval, SQL, and inference 
 **Claude Code**
 
 ```bash
-claude mcp add aura -- npx -y @aurafhe/mcp
+claude mcp add aura -- npx -y github:aurafhe-official/mcp
 ```
+
+**Claude Desktop** — `claude_desktop_config.json` (same `mcpServers` block as Cursor).
 
 **VS Code Copilot** — `.vscode/mcp.json`:
 
@@ -96,8 +100,9 @@ claude mcp add aura -- npx -y @aurafhe/mcp
 {
   "servers": {
     "aura": {
+      "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@aurafhe/mcp"]
+      "args": ["-y", "github:aurafhe-official/mcp"]
     }
   }
 }
@@ -106,7 +111,7 @@ claude mcp add aura -- npx -y @aurafhe/mcp
 **HTTP** (one URL for a team):
 
 ```bash
-npx -y @aurafhe/mcp --http --port 8787
+npx -y github:aurafhe-official/mcp --http --port 8787
 ```
 
 ```json
@@ -116,9 +121,6 @@ npx -y @aurafhe/mcp --http --port 8787
   }
 }
 ```
-
-Until npm: `npx -y github:aurafhe-official/mcp`  
-Fallback: `npx -y github:genevaprojects/aura-sdk`
 
 Canonical repo: [github.com/aurafhe-official/mcp](https://github.com/aurafhe-official/mcp)
 
