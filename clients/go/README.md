@@ -4,7 +4,7 @@ Standard library only. Works against any server that speaks the Aura FHE
 protocol (`docs/PROTOCOL.md`).
 
 ```bash
-go get github.com/aurafhe/mcp/clients/go
+go get github.com/aurafhe-official/mcp/clients/go
 ```
 
 ```go
@@ -15,7 +15,7 @@ import (
     "fmt"
     "log"
 
-    afhe "github.com/aurafhe/mcp/clients/go"
+    afhe "github.com/aurafhe-official/mcp/clients/go"
 )
 
 func main() {

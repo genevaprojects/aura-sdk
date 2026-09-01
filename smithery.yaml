@@ -5,7 +5,7 @@ startCommand:
     properties:
       apiUrl:
         type: string
-        description: AURA coprocessor URL
+        description: Private-compute backend URL
         default: https://api.afhe.io:8443
       apiKey:
         type: string

@@ -1,16 +1,14 @@
 # Architecture
 
 ```text
-AI agent (Cursor, Claude, VS Code, …)
-  ↓  MCP  (npx -y @aurafhe/mcp)
-Aura FHE connector
+MCP host (Cursor, Claude, VS Code, …)
+  ↓  MCP tools   npx -y @aurafhe/mcp
+AURA MCP server
   ↓  HTTPS + JSON
-Coprocessor
-  ↓
-Private evaluation engine
+Private-compute network
 ```
 
-The connector is the product. Language SDKs in `clients/` are the same protocol for apps that are not MCP hosts. Default network: `https://api.afhe.io:8443`. Story: [STORY.md](STORY.md).
+This package is an MCP server. Language SDKs in `clients/` are the same backend for apps that are not MCP hosts. Default network: `https://api.afhe.io:8443`. Story: [STORY.md](STORY.md).
 
 ## What the agent sees
 
@@ -22,14 +20,10 @@ Tools, not key files:
 
 Handles live in the MCP process. Ciphertext does not have to round-trip through the prompt.
 
-## What the coprocessor sees
+## What the backend sees
 
-The HTTP contract in [PROTOCOL.md](PROTOCOL.md): health, encrypt, decrypt, generic `call`. The connector maps AI op names (`add`, `mean`, `concat`) onto that contract.
+The HTTP contract in [PROTOCOL.md](PROTOCOL.md): health, encrypt, decrypt, generic `call`. This MCP maps agent op names (`add`, `mean`, `concat`) onto that contract.
 
-## Why the split
+## Why MCP
 
-- hosts speak MCP
-- apps speak the TypeScript / Python / Go / CLI clients
-- the coprocessor can change implementation as long as the HTTP contract holds
-- AURA wraps the execution path: models and agents speak MCP, this connector
-reaches the coprocessor, ciphertext never has to enter the prompt.
+Hosts already speak tools. This server is one more tool. Apps that are not MCP hosts use TypeScript / Python / Go / CLI. The backend can change as long as the HTTP contract holds.

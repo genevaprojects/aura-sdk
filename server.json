@@ -1,10 +1,10 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
-  "name": "io.github.aurafhe/mcp",
-  "title": "AURA Encrypted MCP",
-  "description": "Ciphertext compute for AI agents. One-line MCP access to the AURA coprocessor network.",
+  "name": "io.github.aurafhe-official/mcp",
+  "title": "AURA MCP",
+  "description": "MCP server for private compute. Add it to any agent host — the model never sees the data.",
   "repository": {
-    "url": "https://github.com/aurafhe/mcp",
+    "url": "https://github.com/aurafhe-official/mcp",
     "source": "github"
   },
   "version": "0.4.0",
@@ -20,7 +20,7 @@
       "environmentVariables": [
         {
           "name": "AFHE_API_URL",
-          "description": "Override the AURA coprocessor URL. Default is the genesis network at https://api.afhe.io:8443",
+          "description": "Override the private-compute backend. Default is https://api.afhe.io:8443",
           "isRequired": false,
           "format": "string"
         },

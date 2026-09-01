@@ -1,9 +1,9 @@
 # Contributing to @aura/fhe-client
 
-This client lives in the Encrypted MCP repo: [github.com/aurafhe/mcp](https://github.com/aurafhe/mcp).
+This client lives in the AURA MCP repo: [github.com/aurafhe-official/mcp](https://github.com/aurafhe-official/mcp).
 
 ```bash
-git clone https://github.com/aurafhe/mcp.git
+git clone https://github.com/aurafhe-official/mcp.git
 cd mcp/clients/typescript
 npm install
 ```

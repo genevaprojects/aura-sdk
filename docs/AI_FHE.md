@@ -1,18 +1,15 @@
-# Encrypted MCP
+# AURA MCP
 
-AURA lets AI use data without ever seeing it. This connector is the access layer.
-Story: [STORY.md](STORY.md).
+An MCP server. Agents use tools. The model never sees the data.
 
 ```text
 Agent  --MCP-->  npx @aurafhe/mcp  --HTTPS-->  api.afhe.io:8443
 ```
 
-Paste the connector. Do not rebuild the model. Do not put secrets in the prompt.
-
-1. `fhe_status` — genesis coprocessor health
-2. `fhe_private_eval` — seal, compute on ciphertext, reveal only the answer
+1. `fhe_status` — is this MCP online?
+2. `fhe_private_eval` — seal, run, reveal only the answer
 3. Keep intermediates as `ct_…` handles
 
-Live ops are arithmetic, compare, strings, and scientific functions. Retrieval, SQL, and inference are roadmap.
+Live ops: arithmetic, compare, strings, scientific. Retrieval, SQL, and inference are roadmap.
 
-That is the product surface from the AURA deck: **FHE is the moat, MCP is the distribution.**
+Story: [STORY.md](STORY.md).

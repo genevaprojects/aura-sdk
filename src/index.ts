@@ -61,13 +61,13 @@ async function main() {
         })()
       })
     }).listen(port, '0.0.0.0', () => {
-      console.error(`AURA Encrypted MCP on http://0.0.0.0:${port}/mcp`)
+      console.error(`AURA MCP on http://0.0.0.0:${port}/mcp`)
     })
     return
   }
 
   serveStdio(factory)
-  console.error(`AURA Encrypted MCP → ${process.env.AFHE_API_URL ?? DEFAULT_COPROCESSOR_URL}`)
+  console.error(`AURA MCP → ${process.env.AFHE_API_URL ?? DEFAULT_COPROCESSOR_URL}`)
 }
 
 main().catch((err) => {

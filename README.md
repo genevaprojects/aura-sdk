@@ -1,8 +1,6 @@
-# AURA Encrypted MCP
+# AURA MCP
 
-The encrypted compute network for AI. **MCP is the distribution.**
-
-Paste this into Cursor, Claude, VS Code, or any MCP host. It talks to the AURA coprocessor. The model never sees the data.
+An **MCP server** for private compute. Add it to Cursor, Claude, VS Code, or any MCP host. Your agent gets tools. The model never sees the data.
 
 ```json
 {
@@ -20,51 +18,42 @@ npx -y @aurafhe/mcp
 claude mcp add aura -- npx -y @aurafhe/mcp
 ```
 
-That is the whole install. No localhost, no SDK rebuild, no key files in chat.
+That is the whole install. No SDK. No keys in chat. No localhost.
 
-Default network: [`https://api.afhe.io:8443`](https://api.afhe.io:8443/health)
-
-To stand up the GitHub org, npm package, TLS, and hosted URL, follow **[docs/LAUNCH.md](docs/LAUNCH.md)** or run `bash scripts/launch.sh`.
-
+Zero-config talks to genesis: [`https://api.afhe.io:8443`](https://api.afhe.io:8443/health)
 
 ---
 
-## The story
+## Why this MCP
 
-AI is moving from assistants to agents to transactions to organisations to machines. Every step increases the data it must touch. Today's stack protects data at rest and in transit — then **decrypts it the moment a model works on it**.
+Agents already speak **tools**. AURA is one more MCP server: the host seals inputs, the network computes, the agent only receives handles (`ct_…`) or the final answer.
 
-AURA closes that gap:
+1. **Encrypt at the owner**
+2. **Compute on ciphertext**
+3. **Decrypt only at the recipient**
 
-1. **Encrypt at the owner** — data is sealed before it leaves
-2. **Compute on ciphertext** — the coprocessor runs the job without seeing plaintext
-3. **Decrypt only at the recipient** — the agent reveals only the answer you asked for
-
-FHE is the moat. MCP is the distribution. Existing AI migrates in. No rebuild. Full narrative: [docs/STORY.md](docs/STORY.md).
+Existing agents migrate in. No rebuild. Story: [docs/STORY.md](docs/STORY.md).
 
 ```text
-LLMs · agents · tools · devices
-        ↓  MCP
-AURA Encrypted MCP     ← this package
+Cursor · Claude · VS Code · any MCP host
+        ↓  MCP tools
+@aurafhe/mcp
         ↓  HTTPS
-AURA coprocessor network
+AURA network
 ```
-
-Existing AI migrates in. No rebuild.
 
 ---
 
-## What the agent can do
+## Tools
 
-| Tool | Role |
+| Tool | What the agent uses it for |
 |---|---|
-| `fhe_status` | Is the AURA network reachable? |
-| `fhe_ops` | Operations the coprocessor will run on ciphertext |
-| `fhe_private_eval` | **Main path.** Seal → evaluate → optional reveal |
+| `fhe_status` | Is this MCP online? |
+| `fhe_ops` | Which private ops can I call? |
+| `fhe_private_eval` | **Main tool.** Seal → run → optional reveal |
 | `fhe_encrypt` / `fhe_compute` / `fhe_decrypt` | Multi-step graphs with `ct_…` handles |
 
-The model holds handles, not secrets. Ciphertext never has to enter the prompt.
-
-Live coprocessor ops: arithmetic, compare, bitwise, strings, scientific. Retrieval, SQL, and inference are roadmap — [docs/STORY.md](docs/STORY.md).
+Live ops: add, mean, compare, concat, scientific. Retrieval, SQL, and inference are roadmap.
 
 ```json
 {
@@ -80,7 +69,7 @@ Live coprocessor ops: arithmetic, compare, bitwise, strings, scientific. Retriev
 
 ---
 
-## Hosts
+## Add to a host
 
 **Cursor** — `.cursor/mcp.json` or `~/.cursor/mcp.json`:
 
@@ -114,7 +103,7 @@ claude mcp add aura -- npx -y @aurafhe/mcp
 }
 ```
 
-**Hosted HTTP** (one URL for a team or product):
+**HTTP** (one URL for a team):
 
 ```bash
 npx -y @aurafhe/mcp --http --port 8787
@@ -128,39 +117,22 @@ npx -y @aurafhe/mcp --http --port 8787
 }
 ```
 
-Point `mcp.afhe.io` at that process when you terminate TLS in front of it.
+Until npm: `npx -y github:aurafhe-official/mcp`  
+Fallback: `npx -y github:genevaprojects/aura-sdk`
 
-Until `@aurafhe/mcp` is on npm, run it from GitHub:
-
-```bash
-npx -y github:aurafhe/mcp
-# fallback while that repo is still empty:
-npx -y github:genevaprojects/aura-sdk
-```
-
-Canonical repo: [github.com/aurafhe/mcp](https://github.com/aurafhe/mcp)
+Canonical repo: [github.com/aurafhe-official/mcp](https://github.com/aurafhe-official/mcp)
 
 ---
 
 ## Environment (optional)
 
-Zero config hits genesis compute. Override only when you must:
-
 | Variable | Default | Purpose |
 |---|---|---|
-| `AFHE_API_URL` | `https://api.afhe.io:8443` | Coprocessor |
-| `AFHE_API_KEY` | — | Bearer token if the node requires it |
+| `AFHE_API_URL` | `https://api.afhe.io:8443` | Backend for this MCP |
+| `AFHE_API_KEY` | — | Bearer token if required |
 | `AFHE_TIMEOUT_MS` | `120000` | Per-request timeout |
 | `AFHE_INSECURE_TLS` | genesis + localhost | Set `0` to require a valid certificate |
 
----
-
-## Language SDKs
-
-Same coprocessor, for apps that are not MCP hosts. See [`clients/`](clients/).
-
-Docs: [docs.afhe.io](https://docs.afhe.io) · [docs/AI_FHE.md](docs/AI_FHE.md)
-
-## License
+Apps that are not MCP hosts: [`clients/`](clients/). Docs: [docs.afhe.io](https://docs.afhe.io)
 
 MIT · Mochi Labs · [gen@afhe.io](mailto:gen@afhe.io)

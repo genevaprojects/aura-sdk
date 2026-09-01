@@ -1,8 +1,8 @@
 # Quickstart
 
-Private AI compute in one line, then optional language SDKs. Story: [STORY.md](STORY.md).
+Add the MCP server, then optional language SDKs. Story: [STORY.md](STORY.md).
 
-## 1. Connect the MCP connector
+## 1. Add the MCP server
 
 ```bash
 npx -y @aurafhe/mcp
@@ -54,7 +54,7 @@ console.log(await fhe.decryptInt(sum)) // "42"
 ### Go
 
 ```bash
-go get github.com/aurafhe/mcp/clients/go
+go get github.com/aurafhe-official/mcp/clients/go
 ```
 
 ```go

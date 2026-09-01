@@ -6,9 +6,9 @@ Email **security@afhe.io** with the details.
 
 Please do not open public issues for security reports.
 
-## MCP connector
+## MCP server
 
-`npx -y @aurafhe/mcp` talks to the coprocessor. Do not put secret key material in MCP env vars or chat. `AFHE_API_KEY` is an access token for the coprocessor HTTP API, not the FHE secret.
+`npx -y @aurafhe/mcp` is an MCP server. Do not put secret key material in MCP env vars or chat. `AFHE_API_KEY` is an access token for the backend HTTP API, not the FHE secret.
 
 Handles (`ct_…`) live in the MCP process. Ciphertext does not have to round-trip through the prompt. Reveal (`fhe_decrypt` / `reveal: true`) is the only step that returns plaintext to the model.
 

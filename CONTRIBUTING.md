@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping make private AI compute easier. Canonical repo: [github.com/aurafhe/mcp](https://github.com/aurafhe/mcp). Story: [docs/STORY.md](docs/STORY.md).
+Thanks for helping make private AI compute easier. Canonical repo: [github.com/aurafhe-official/mcp](https://github.com/aurafhe-official/mcp). Story: [docs/STORY.md](docs/STORY.md).
 
 ## Reporting bugs
 
@@ -12,7 +12,7 @@ Please open an issue with:
 
 ## Development
 
-MCP connector (this is the product):
+MCP server (this is the product):
 
 ```bash
 npm install

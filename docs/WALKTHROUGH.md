@@ -9,15 +9,15 @@ This document answers both. Read [STORY.md](STORY.md) first.
 
 ## What this repo is
 
-This repo is the **Aura FHE MCP connector** plus language SDKs for the same coprocessor.
+This repo is an **MCP server** (`@aurafhe/mcp`) plus language SDKs for the same backend.
 
-Agents connect with one line:
+Agents add one MCP:
 
 ```bash
 npx -y @aurafhe/mcp
 ```
 
-The connector exposes private-compute tools (`fhe_private_eval`, `fhe_encrypt`, …).
+The server exposes private-compute tools (`fhe_private_eval`, `fhe_encrypt`, …).
 Apps that are not MCP hosts use TypeScript, Python, Go, or CLI clients. Every
 path speaks the same HTTP protocol:
 
@@ -31,7 +31,7 @@ path speaks the same HTTP protocol:
 - `POST /call`
 - `POST /verify`
 
-The agent talks to MCP. MCP talks to the coprocessor. The coprocessor evaluates
+The agent talks to MCP. This MCP talks to the backend. The backend evaluates
 sealed values. Read [AI_FHE.md](AI_FHE.md) first if you are wiring an agent.
 
 ## Key custody
@@ -54,7 +54,7 @@ console.log(await fhe.decryptInt(sum)) // "3"
 ### Go
 
 ```go
-import afhe "github.com/aurafhe/mcp/clients/go"
+import afhe "github.com/aurafhe-official/mcp/clients/go"
 
 fhe, _ := afhe.Connect(ctx)
 a, _ := fhe.EncryptInt(ctx, "2")
@@ -80,11 +80,11 @@ fhe enc int 1 > b.ct
 fhe add int "$(cat a.ct)" "$(cat b.ct)" | fhe dec int
 ```
 
-`connect()` in the language SDKs still defaults to a local node unless you set `AFHE_API_URL`. The MCP connector defaults to the hosted genesis coprocessor.
+`connect()` in the language SDKs still defaults to a local node unless you set `AFHE_API_URL`. This MCP server defaults to the hosted genesis network.
 
 ## Where to point it
 
-MCP (this product) defaults to:
+MCP (this server) defaults to:
 
 ```text
 https://api.afhe.io:8443

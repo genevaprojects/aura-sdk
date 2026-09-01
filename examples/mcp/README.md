@@ -1,6 +1,6 @@
-# Connect AURA
+# Add AURA as an MCP server
 
-Paste this. It uses the hosted coprocessor. No local server.
+Paste this. Your agent gets private-compute tools. No local server.
 
 ```json
 {
@@ -17,7 +17,7 @@ Paste this. It uses the hosted coprocessor. No local server.
 claude mcp add aura -- npx -y @aurafhe/mcp
 ```
 
-Until npm publish: `npx -y github:aurafhe/mcp` (fallback: `npx -y github:genevaprojects/aura-sdk`)
+Until npm: `npx -y github:aurafhe-official/mcp`  
+Fallback: `npx -y github:genevaprojects/aura-sdk`
 
-Story: [docs/STORY.md](../../docs/STORY.md). Launch: [docs/LAUNCH.md](../../docs/LAUNCH.md)
-
+[docs/STORY.md](../../docs/STORY.md) · [docs/LAUNCH.md](../../docs/LAUNCH.md)

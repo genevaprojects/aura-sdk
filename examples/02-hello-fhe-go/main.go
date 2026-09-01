@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"log"
 
-	afhe "github.com/aurafhe/mcp/clients/go"
+	afhe "github.com/aurafhe-official/mcp/clients/go"
 )
 
 func main() {

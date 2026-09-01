@@ -1,7 +1,7 @@
 {
   "name": "@aurafhe/mcp",
   "version": "0.4.0",
-  "description": "AURA Encrypted MCP — the access layer for ciphertext AI. One line connects Cursor, Claude, and any agent to the AURA coprocessor.",
+  "description": "MCP server for private AI compute. Add it to Cursor, Claude, or any host — the model never sees the data.",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
@@ -27,8 +27,11 @@
     "inspector": "npx @modelcontextprotocol/inspector node dist/index.js"
   },
   "keywords": [
+    "mcp-server",
     "mcp",
     "model-context-protocol",
+    "agents",
+    "tools",
     "fhe",
     "ai",
     "private-ai",
@@ -42,10 +45,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aurafhe/mcp.git"
+    "url": "git+https://github.com/aurafhe-official/mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/aurafhe/mcp/issues"
+    "url": "https://github.com/aurafhe-official/mcp/issues"
   },
   "homepage": "https://afhe.io",
   "dependencies": {

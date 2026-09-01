@@ -25,7 +25,7 @@ test('http healthz is load-balancer ready', async (t) => {
     err += chunk
   })
   const start = Date.now()
-  while (!err.includes('Encrypted MCP')) {
+  while (!err.includes('AURA MCP')) {
     if (Date.now() - start > 15_000) {
       child.kill('SIGTERM')
       throw new Error(`http server did not start: ${err}`)

@@ -17,14 +17,14 @@ export function createFheServer(session = new FheSession(envCoprocessor())) {
     const server = new McpServer({
         name: 'aura',
         version: VERSION,
-        title: 'AURA Encrypted MCP',
+        title: 'AURA MCP',
         websiteUrl: 'https://afhe.io',
     }, {
-        instructions: 'AURA is the encrypted compute network for AI. Agents reach ciphertext compute through this MCP. Call fhe_status, then fhe_private_eval. Data stays encrypted from input to output. Reveal only the final answer. Never print raw ciphertext; use ct_ handles.',
+        instructions: 'AURA is an MCP server for private compute. Use these tools like any other MCP tools. Call fhe_status first, then fhe_private_eval. Inputs are sealed before you see them. You get handles (ct_…) or only the final revealed answer. Never ask the user to paste secrets into chat. Never print raw ciphertext.',
     });
     server.registerTool('fhe_status', {
         title: 'Private compute status',
-        description: 'Check that Aura FHE private compute is reachable. Call this first in a session.',
+        description: 'MCP health check. Call this first so the agent knows the private-compute tools are online.',
         annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
     }, async () => {
         try {
@@ -36,7 +36,7 @@ export function createFheServer(session = new FheSession(envCoprocessor())) {
     });
     server.registerTool('fhe_ops', {
         title: 'List private ops',
-        description: 'List AI-facing private-compute operations (add, mean, concat, …). Use these names with fhe_private_eval and fhe_compute.',
+        description: 'List the private ops this MCP server can run (add, mean, concat, …). Pass these names to fhe_private_eval.',
         annotations: { readOnlyHint: true, idempotentHint: true },
     }, async () => json({ ops: session.ops() }));
     server.registerTool('fhe_encrypt', {
@@ -93,7 +93,7 @@ export function createFheServer(session = new FheSession(envCoprocessor())) {
     });
     server.registerTool('fhe_private_eval', {
         title: 'One-shot private compute',
-        description: 'The main AI tool. Encrypts values, runs a private operation (add, mul, mean, concat, …) without reading intermediates, and optionally decrypts only the final answer. Use this for private aggregation, private scoring, and private AI math.',
+        description: 'The main agent tool. Seals inputs, runs the op (add, mul, mean, concat, …) without showing intermediates, and optionally reveals only the final answer. Prefer this over encrypt/compute/decrypt.',
         inputSchema: z.object({
             domain: DomainSchema.describe('int for integers, float for real math, string for text, binary for bits'),
             op: z.string().describe('add | sub | mul | div | mean | concat | compare | … (see fhe_ops)'),
@@ -138,8 +138,8 @@ export function createFheServer(session = new FheSession(envCoprocessor())) {
         ],
     }));
     server.registerResource('status', 'fhe://status', {
-        title: 'Aura FHE status',
-        description: 'Live private-compute coprocessor status',
+        title: 'AURA MCP status',
+        description: 'Live status for this MCP server and its private-compute backend',
         mimeType: 'application/json',
     }, async (uri) => {
         const status = await session.status();

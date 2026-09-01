@@ -1,7 +1,7 @@
 # Examples
 
-Each folder is a self-contained, runnable example. The MCP connector
-defaults to the hosted coprocessor at `https://api.afhe.io:8443`. Language
+Each folder is a self-contained, runnable example. The MCP server
+defaults to the hosted network at `https://api.afhe.io:8443`. Language
 examples can use that URL or a local node via `AFHE_API_URL`.
 
 | # | Folder | Language | What it shows |

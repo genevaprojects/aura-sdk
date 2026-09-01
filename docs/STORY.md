@@ -1,39 +1,41 @@
 # The AURA story
 
-AI is moving from assistants to agents to transactions to organisations to machines. Each step increases the data it must touch. Today's stack protects data at rest and in transit — then decrypts it the moment a model works on it.
+AI is moving from assistants to agents to transactions to organisations to machines. Agents do work through **tools**. MCP is how those tools are wired.
 
-That compute-time gap is the product.
+Today's stack protects data at rest and in transit — then decrypts it the moment a model (or a tool behind the model) works on it. That compute-time gap is the product.
 
-## What AURA does
+## What this MCP server does
+
+AURA is an MCP server. Add it once. Every host that speaks MCP (Cursor, Claude, VS Code, …) gets private-compute **tools**.
 
 1. **Encrypt at the owner** — data is sealed before it leaves
-2. **Compute on ciphertext** — the coprocessor runs the job without seeing plaintext
+2. **Compute on ciphertext** — the network runs the job without seeing plaintext
 3. **Decrypt only at the recipient** — the agent reveals only the answer you asked for
 
-**FHE is the moat. MCP is the distribution.**
-
-Every lab, agent, and tool already speaks MCP. Existing AI migrates in. No rebuild.
+**MCP is the distribution. FHE is the engine.** Existing agents migrate in. No rebuild.
 
 ```text
-LLMs · agents · tools · devices
-        ↓  MCP
-AURA Encrypted MCP     ← this repository
+Cursor · Claude · VS Code · any MCP host
+        ↓  MCP (tools)
+@aurafhe/mcp     ← this repository
         ↓  HTTPS
-AURA coprocessor network   https://api.afhe.io:8443
+AURA network   https://api.afhe.io:8443
 ```
 
-This repo is the access layer: paste `@aurafhe/mcp` into Cursor, Claude, or VS Code. Language SDKs in `clients/` speak the same HTTP protocol for apps that are not MCP hosts.
+Paste `@aurafhe/mcp`. Language SDKs in `clients/` are the same backend for apps that are not MCP hosts.
 
 ## What ships today
 
-Genesis coprocessor (`GET /functions`): encrypt / decrypt, integer and float arithmetic, compare, bitwise, string concat / substring, and scientific ops. The MCP tools wrap that as `fhe_private_eval` (seal → evaluate → optional reveal) and `ct_…` handles so ciphertext never has to enter the prompt.
+MCP tools: `fhe_status`, `fhe_ops`, `fhe_private_eval`, plus encrypt / compute / decrypt with `ct_…` handles.
+
+Backend ops: encrypt / decrypt, integer and float arithmetic, compare, bitwise, strings, scientific. Ciphertext never has to enter the prompt.
 
 ## What is roadmap
 
-Encrypted retrieval, private SQL, and private inference are on the AURA deck. They are **not** live HTTP endpoints on this coprocessor yet. Do not document them as shipped.
+Encrypted retrieval, private SQL, and private inference are on the AURA deck. They are **not** live MCP tools yet.
 
 ## Who
 
 Mochi Labs Pte. Ltd. · [gen@afhe.io](mailto:gen@afhe.io) · [afhe.io](https://afhe.io) · [docs.afhe.io](https://docs.afhe.io)
 
-Canonical package home: [github.com/aurafhe/mcp](https://github.com/aurafhe/mcp)
+Canonical home: [github.com/aurafhe-official/mcp](https://github.com/aurafhe-official/mcp)
