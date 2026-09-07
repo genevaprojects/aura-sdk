@@ -1,0 +1,16 @@
+{
+  "started": "2026-09-07T05:15:44.786Z",
+  "finished": "2026-09-07T05:15:48.667Z",
+  "via": "npx -y github:aurafhe-official/mcp",
+  "status": {
+    "ok": true,
+    "network": "https://api.afhe.io:8443",
+    "coprocessor": "ok"
+  },
+  "encrypt": [
+    { "handle": "ct_1", "domain": "int", "value": 40 },
+    { "handle": "ct_2", "domain": "int", "value": 2 }
+  ],
+  "compute": { "handle": "ct_3", "domain": "int", "op": "AddCipherInt" },
+  "decrypt": { "plaintext": "42", "domain": "int", "handle": "ct_3" }
+}
