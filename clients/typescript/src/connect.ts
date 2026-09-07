@@ -6,7 +6,8 @@
  *
  * Handles the three things every new user trips over:
  *   1. Default base URL = process.env.AFHE_API_URL ?? 'https://localhost:8443'.
- *   2. Self-signed TLS — auto-accepted when the host is localhost / 127.0.0.1.
+ *      MCP uses genesis (https://api.afhe.io:8443); set AFHE_API_URL to join it.
+ *   2. Relaxed TLS for localhost and api.afhe.io (genesis cert).
  *      (In Node only; browsers trust the system CA store.)
  *   3. Auto-load — tells the server to load the standard key paths
  *      ('file/skb', 'file/pkb', 'file/dictb') before returning. Skip with
@@ -17,9 +18,9 @@ import { AfheClient, type AfheClientOptions, AfheApiError } from "./index";
 
 export interface ConnectOptions extends Partial<AfheClientOptions> {
   /**
-   * Trust self-signed TLS certificates. Defaults to `true` for localhost,
-   * `false` for any other host. Only effective in Node.js (browsers use the
-   * system CA store).
+   * Trust self-signed / expired TLS certificates. Defaults to `true` for
+   * localhost and the genesis host `api.afhe.io`, `false` otherwise.
+   * Only effective in Node.js (browsers use the system CA store).
    */
   insecureTLS?: boolean;
   /**
@@ -46,12 +47,11 @@ const DEFAULT_KEYS = { skb: "file/skb", pkb: "file/pkb", dictb: "file/dictb" } a
  * Connect to an Aura FHE coprocessor and return a ready-to-use client.
  *
  * Reads `AFHE_API_URL` from the environment if `baseUrl` is not given.
- * Tolerates the self-signed certificate that the reference local server
- * ships with, but only for `localhost` / `127.0.0.1`.
+ * Relaxes TLS for localhost and genesis (`api.afhe.io`).
  */
 export async function connect(opts: ConnectOptions = {}): Promise<AfheClient> {
   const baseUrl = opts.baseUrl ?? readEnv("AFHE_API_URL") ?? DEFAULT_BASE_URL;
-  const insecureTLS = opts.insecureTLS ?? isLocalhost(baseUrl);
+  const insecureTLS = opts.insecureTLS ?? shouldRelaxTLS(baseUrl);
   const autoLoad = opts.autoLoad ?? true;
 
   const fetchImpl = opts.fetch ?? (await buildFetch(insecureTLS));
@@ -101,10 +101,10 @@ function readEnv(name: string): string | undefined {
   return proc?.env?.[name];
 }
 
-function isLocalhost(url: string): boolean {
+function shouldRelaxTLS(url: string): boolean {
   try {
-    const u = new URL(url);
-    return u.hostname === "localhost" || u.hostname === "127.0.0.1" || u.hostname === "[::1]";
+    const host = new URL(url).hostname;
+    return host === "localhost" || host === "127.0.0.1" || host === "[::1]" || host === "api.afhe.io";
   } catch {
     return false;
   }

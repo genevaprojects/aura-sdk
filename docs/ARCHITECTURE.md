@@ -1,72 +1,29 @@
 # Architecture
 
-Four layers, one stable contract.
-
 ```text
-Application
-  ↓
-Client SDK (this repo)
-  ↓
-Aura FHE HTTP protocol
-  ↓
-Coprocessor server
-  ↓
-Cryptographic engine
+MCP host (Cursor, Claude, VS Code, …)
+  ↓  MCP tools   npx -y github:aurafhe-official/mcp
+AURA MCP server
+  ↓  HTTPS + JSON
+Private-compute network
 ```
 
-## Layer 3 — Application
+This package is an MCP server. Language SDKs in `clients/` are the same backend for apps that are not MCP hosts. Default network: `https://api.afhe.io:8443`. Story: [STORY.md](STORY.md).
 
-Your code calls language-native helpers such as:
+## What the agent sees
 
-- `encryptInt`
-- `addInt`
-- `decryptInt`
-- `verify`
+Tools, not key files:
 
-The application does not need to know the raw HTTP routes.
+- `fhe_status` / `fhe_ops`
+- `fhe_private_eval` — one-shot private compute
+- `fhe_encrypt` / `fhe_compute` / `fhe_decrypt` — multi-step graphs with `ct_…` handles
 
-## Layer 2 — Client SDK
+Handles live in the MCP process. Ciphertext does not have to round-trip through the prompt.
 
-This repo contains:
+## What the backend sees
 
-- TypeScript
-- Go
-- Python
-- CLI
+The HTTP contract in [PROTOCOL.md](PROTOCOL.md): health, encrypt, decrypt, generic `call`. This MCP maps agent op names (`add`, `mean`, `concat`) onto that contract.
 
-Each client does the same jobs:
+## Why MCP
 
-1. speaks the Aura FHE HTTP protocol
-2. provides typed helpers for common operations
-3. exposes `connect()` for fast startup
-4. exposes `call(fn, args)` as the escape hatch
-
-## Layer 1 — Coprocessor server
-
-The coprocessor owns the loaded key material for the running process and
-exposes the protocol routes:
-
-- `/health`
-- `/functions`
-- `/init`
-- `/keygen`
-- `/load`
-- `/encrypt/{domain}`
-- `/decrypt/{domain}`
-- `/call`
-- `/verify`
-
-The server is the boundary between application code and FHE execution.
-
-## Layer 0 — Cryptographic engine
-
-The cryptographic engine performs the actual FHE operations over ciphertexts.
-It is hidden behind the coprocessor API.
-
-## Why the layering matters
-
-- clients can evolve without changing app code
-- server builds can change without changing the wire contract
-- new SDKs only need the HTTP protocol, not private implementation details
-- key custody stays explicit: `SKB` with the data owner, `PKB` and `DictB` on
-  the compute side
+Hosts already speak tools. This server is one more tool. Apps that are not MCP hosts use TypeScript / Python / Go / CLI. The backend can change as long as the HTTP contract holds.

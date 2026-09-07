@@ -1,160 +1,141 @@
-# Aura FHE SDK
+<p align="center">
+  <img src="docs/assets/aura.png" width="220" alt="AURA">
+</p>
 
-HTTP clients for the Aura FHE coprocessor.
+<p align="center">
+  <b>MCP server for private compute</b><br>
+  Add it to Cursor, Claude, or any host. The model never sees the data.
+</p>
 
-This repo is SDK-only: TypeScript, Go, Python, and CLI clients that all speak
-the same HTTPS+JSON protocol.
-
-> Start with [WALKTHROUGH](docs/WALKTHROUGH.md), then keep
-> [QUICKSTART](docs/QUICKSTART.md) open beside your editor.
-
----
-
-## Quickstart
-
-### TypeScript
-
-```bash
-npm install @aura/fhe-client
-```
-
-```ts
-import { connect } from '@aura/fhe-client'
-
-const fhe = await connect()
-const a = await fhe.encryptInt(25)
-const b = await fhe.encryptInt(17)
-const sum = await fhe.addInt(a, b)
-
-console.log(await fhe.decryptInt(sum)) // "42"
-```
-
-### Go
-
-```bash
-go get github.com/aurafhe/fhe-client/clients/go
-```
-
-```go
-import afhe "github.com/aurafhe/fhe-client/clients/go"
-
-c, _ := afhe.Connect(ctx)
-a, _ := c.EncryptInt(ctx, "25")
-b, _ := c.EncryptInt(ctx, "17")
-sum, _ := c.AddInt(ctx, a, b)
-pt, _ := c.DecryptInt(ctx, sum)
-
-fmt.Println(pt) // "42"
-```
-
-### Python
-
-```bash
-pip install aura-fhe
-```
-
-```python
-from aura_fhe import connect
-
-fhe = connect()
-a = fhe.encrypt_int(25)
-b = fhe.encrypt_int(17)
-
-print(fhe.decrypt_int(fhe.add_int(a, b)))  # "42"
-```
-
-### CLI
-
-```bash
-npm install -g @aura/fhe-cli
-fhe connect
-fhe enc int 25 > a.ct
-fhe enc int 17 > b.ct
-fhe add int "$(cat a.ct)" "$(cat b.ct)" | fhe dec int
-```
-
----
-
-## What the SDK covers
-
-- Encrypt / decrypt for `int`, `float`, `string`, `binary`
-- Public-key encryption
-- Arithmetic, bitwise, compare, string, and scientific operations
-- Signing / verification
-- Generic escape hatch: `call(fn, args)`
-
-All clients expose the same protocol surface in language-idiomatic form.
-
----
-
-## Recommended keygen profile
-
-Use the same profile everywhere unless your deployment team tells you otherwise:
+<p align="center">
+  <a href="https://github.com/aurafhe-official/mcp"><img src="https://img.shields.io/badge/MCP-server-F5A623?style=flat-square&labelColor=111" alt="MCP"></a>
+  <a href="https://api.afhe.io:8443/health"><img src="https://img.shields.io/badge/genesis-live-2ea44f?style=flat-square&labelColor=111" alt="genesis live"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F5A623?style=flat-square&labelColor=111" alt="MIT"></a>
+  <a href="https://afhe.io"><img src="https://img.shields.io/badge/afhe.io-black?style=flat-square&labelColor=111" alt="afhe.io"></a>
+</p>
 
 ```json
 {
-  "m": 2,
-  "n": 4,
-  "q": 2147483647,
-  "p": 512,
-  "delta": 0.001
+  "mcpServers": {
+    "aura": {
+      "command": "npx",
+      "args": ["-y", "github:aurafhe-official/mcp"]
+    }
+  }
 }
 ```
 
-Full details: [docs/KEY_MANAGEMENT.md](docs/KEY_MANAGEMENT.md)
-
----
-
-## Repository layout
-
-```text
-clients/
-  typescript/   @aura/fhe-client
-  go/           github.com/aurafhe/fhe-client/clients/go
-  python/       aura-fhe
-  cli/          @aura/fhe-cli
-
-examples/
-  01-hello-fhe-node/
-  02-hello-fhe-go/
-  03-hello-fhe-python/
-  04-browser/
-  05-cli/
-  06-secure-sum/
-
-docs/
-  QUICKSTART.md
-  WALKTHROUGH.md
-  PROTOCOL.md
-  KEY_MANAGEMENT.md
-  ARCHITECTURE.md
-  SECURITY.md
+```bash
+npx -y github:aurafhe-official/mcp
+claude mcp add aura -- npx -y github:aurafhe-official/mcp
 ```
 
----
+That is the whole install. Then ask the agent:
 
-## Running against a server
+> Privately add 25 and 17.
 
-Point the SDK at any compatible Aura FHE coprocessor:
+It should call `fhe_private_eval` and return `42`. No SDK. No keys in chat. No localhost.
 
-- local default: `https://localhost:8443`
-- override with `AFHE_API_URL`
-- or pass `baseUrl` / `BaseURL` / `base_url`
-
-`connect()` also auto-loads the standard key paths by default:
-
-- `file/skb`
-- `file/pkb`
-- `file/dictb`
+After `npm publish`, the same paste with `@aurafhe/mcp` also works.
 
 ---
 
-## Links
+<details>
+<summary><b>Cursor · Claude · VS Code</b></summary>
 
-- Docs: [docs.afhe.io](https://docs.afhe.io)
-- Project: [afhe.io](https://afhe.io)
-- Issues: [github.com/aurafhe/fhe-client/issues](https://github.com/aurafhe/fhe-client/issues)
+**Cursor** — `.cursor/mcp.json` or `~/.cursor/mcp.json`
 
-## License
+```json
+{
+  "mcpServers": {
+    "aura": {
+      "command": "npx",
+      "args": ["-y", "github:aurafhe-official/mcp"]
+    }
+  }
+}
+```
 
-MIT
+**Claude Code**
+
+```bash
+claude mcp add aura -- npx -y github:aurafhe-official/mcp
+```
+
+**Claude Desktop** — paste [`examples/mcp/claude-desktop.json`](examples/mcp/claude-desktop.json) into `claude_desktop_config.json`.
+
+**VS Code Copilot** — `.vscode/mcp.json`
+
+```json
+{
+  "servers": {
+    "aura": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "github:aurafhe-official/mcp"]
+    }
+  }
+}
+```
+
+**HTTP** (one URL for a team)
+
+```bash
+npx -y github:aurafhe-official/mcp --http --port 8787
+```
+
+</details>
+
+<details>
+<summary><b>Tools the agent gets</b></summary>
+
+| Tool | What the agent uses it for |
+|---|---|
+| `fhe_status` | Is this MCP online? |
+| `fhe_ops` | Which private ops can I call? |
+| `fhe_private_eval` | **Main tool.** Seal → run → optional reveal |
+| `fhe_encrypt` / `fhe_compute` / `fhe_decrypt` | Multi-step graphs with `ct_…` handles |
+
+Live ops: add, mean, compare, concat, scientific. Retrieval, SQL, and inference are roadmap.
+
+```json
+{
+  "name": "fhe_private_eval",
+  "arguments": {
+    "domain": "int",
+    "op": "mean",
+    "values": [81, 94, 73],
+    "reveal": true
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><b>Why MCP</b></summary>
+
+Agents already speak **tools**. AURA is one more MCP server: the host seals inputs, the network computes, the agent only receives handles (`ct_…`) or the final answer.
+
+1. Encrypt at the owner
+2. Compute on ciphertext
+3. Decrypt only at the recipient
+
+Existing agents migrate in. No rebuild. Story: [docs/STORY.md](docs/STORY.md).
+
+Zero-config talks to genesis: [`https://api.afhe.io:8443`](https://api.afhe.io:8443/health)
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `AFHE_API_URL` | `https://api.afhe.io:8443` | Backend |
+| `AFHE_API_KEY` | — | Bearer token if required |
+| `AFHE_TIMEOUT_MS` | `120000` | Per-request timeout |
+| `AFHE_INSECURE_TLS` | genesis + localhost | Set `0` to require a valid certificate |
+
+Apps that are not MCP hosts: [`clients/`](clients/). Docs: [docs.afhe.io](https://docs.afhe.io)
+
+</details>
+
+<p align="center">
+  MIT · Mochi Labs · <a href="mailto:gen@afhe.io">gen@afhe.io</a> · <a href="https://github.com/aurafhe-official/mcp">github.com/aurafhe-official/mcp</a>
+</p>

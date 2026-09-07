@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to `@aura/shield-sdk` will be documented in this file.
+All notable changes to `@aura/fhe-client` will be documented in this file.
 
 ## [0.2.0] - 2026-04-07
 

@@ -7,7 +7,7 @@
 
 import { connect } from "@aura/fhe-client";
 
-const fhe = await connect();                    // localhost:8443, auto-TLS, auto-load keys
+const fhe = await connect();                    // localhost:8443; set AFHE_API_URL for genesis
 
 console.log("health:", await fhe.health());
 

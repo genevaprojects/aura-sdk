@@ -17,5 +17,5 @@ health: { status: 'ok' }
 CMux(1, 0xFF, 0x00) = 255
 ```
 
-If you see `network error` or `cannot reach coprocessor`, start a server
-first and point `AFHE_API_URL` at it.
+If you see `network error` or `cannot reach coprocessor`, start a local server
+or point `AFHE_API_URL` at genesis: `https://api.afhe.io:8443`.

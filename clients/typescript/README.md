@@ -11,7 +11,7 @@ npm install @aura/fhe-client
 ```ts
 import { connect } from '@aura/fhe-client'
 
-const fhe = await connect()                  // localhost:8443, auto-TLS, auto-load keys
+const fhe = await connect()                  // localhost:8443; genesis via $AFHE_API_URL
 const sum = await fhe.addInt(
   await fhe.encryptInt(25),
   await fhe.encryptInt(17),
@@ -30,7 +30,7 @@ The one-line entry point. Returns a ready-to-use `AfheClient`.
 ```ts
 const fhe = await connect({
   baseUrl:      'https://api.example.com:8443',  // default: $AFHE_API_URL or https://localhost:8443
-  insecureTLS:  false,                            // default: true iff host is localhost
+  insecureTLS:  false,                            // default: true for localhost and api.afhe.io
   autoLoad:     true,                             // default: true — POSTs /load with the standard key paths
   keys: {                                         // override the key paths
     skb:   'file/skb',

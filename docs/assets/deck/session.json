@@ -1,0 +1,28 @@
+{
+  "started": "2026-09-07T05:00:39.577Z",
+  "finished": "2026-09-07T05:00:52.816Z",
+  "via": "npx -y github:aurafhe-official/mcp",
+  "server": { "name": "aura", "version": "0.4.0" },
+  "tools": [
+    "fhe_status",
+    "fhe_ops",
+    "fhe_encrypt",
+    "fhe_decrypt",
+    "fhe_compute",
+    "fhe_private_eval"
+  ],
+  "status": {
+    "ok": true,
+    "network": "https://api.afhe.io:8443",
+    "coprocessor": "ok"
+  },
+  "result": { "handle": "ct_1", "domain": "int", "op": "AddCipherInt", "plaintext": "42" },
+  "transcript": [
+    "$ npx -y github:aurafhe-official/mcp",
+    "initialize  aura 0.4.0",
+    "tools       fhe_status  fhe_ops  fhe_encrypt  fhe_decrypt  fhe_compute  fhe_private_eval",
+    "fhe_status  ok  https://api.afhe.io:8443",
+    "call        fhe_private_eval  add  [25, 17]  reveal",
+    "plaintext   42"
+  ]
+}

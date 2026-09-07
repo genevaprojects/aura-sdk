@@ -3,15 +3,23 @@
 Two questions matter:
 
 1. What is this repo?
-2. What do I need for a working encrypted round-trip?
+2. How does an AI agent run private compute?
 
-This document answers both.
+This document answers both. Read [STORY.md](STORY.md) first.
 
 ## What this repo is
 
-This repo contains client SDKs for the Aura FHE coprocessor.
+This repo is an **MCP server** (`@aurafhe/mcp`) plus language SDKs for the same backend.
 
-Every client speaks the same HTTP protocol:
+Agents add one MCP:
+
+```bash
+npx -y github:aurafhe-official/mcp
+```
+
+The server exposes private-compute tools (`fhe_private_eval`, `fhe_encrypt`, …).
+Apps that are not MCP hosts use TypeScript, Python, Go, or CLI clients. Every
+path speaks the same HTTP protocol:
 
 - `GET /health`
 - `GET /functions`
@@ -23,18 +31,12 @@ Every client speaks the same HTTP protocol:
 - `POST /call`
 - `POST /verify`
 
-Your app talks to the SDK. The SDK talks to the coprocessor. The coprocessor
-works on ciphertext.
+The agent talks to MCP. This MCP talks to the backend. The backend evaluates
+sealed values. Read [AI_FHE.md](AI_FHE.md) first if you are wiring an agent.
 
 ## Key custody
 
-Three key blocks matter:
-
-- `SKB`: secret key block, required to decrypt
-- `PKB`: public key block, required for public-key encryption
-- `DictB`: evaluation block, required for homomorphic computation
-
-Keep `SKB` with the data owner.
+Keep decrypt with the data owner. The agent only sees plaintext when a tool is told to `reveal`. Operators who load key material: [KEY_MANAGEMENT.md](KEY_MANAGEMENT.md).
 
 ## The few lines
 
@@ -52,6 +54,8 @@ console.log(await fhe.decryptInt(sum)) // "3"
 ### Go
 
 ```go
+import afhe "github.com/aurafhe-official/mcp/clients/go"
+
 fhe, _ := afhe.Connect(ctx)
 a, _ := fhe.EncryptInt(ctx, "2")
 b, _ := fhe.EncryptInt(ctx, "1")
@@ -76,23 +80,18 @@ fhe enc int 1 > b.ct
 fhe add int "$(cat a.ct)" "$(cat b.ct)" | fhe dec int
 ```
 
-`connect()` defaults to `https://localhost:8443`, handles localhost TLS, and
-auto-loads `file/skb`, `file/pkb`, and `file/dictb`.
+`connect()` in the language SDKs still defaults to a local node unless you set `AFHE_API_URL`. This MCP server defaults to the hosted genesis network.
 
 ## Where to point it
 
-Point the SDK at any compatible Aura FHE coprocessor.
-
-Default:
+MCP (this server) defaults to:
 
 ```text
-https://localhost:8443
+https://api.afhe.io:8443
 ```
 
-Health check:
-
 ```bash
-curl -k https://localhost:8443/health
+curl -k https://api.afhe.io:8443/health
 ```
 
 ## Recommended keygen profile
@@ -138,8 +137,9 @@ truth.
 
 ## Suggested reading order
 
-1. [QUICKSTART.md](QUICKSTART.md)
-2. [KEY_MANAGEMENT.md](KEY_MANAGEMENT.md)
-3. [PROTOCOL.md](PROTOCOL.md)
-4. [ARCHITECTURE.md](ARCHITECTURE.md)
-5. [SECURITY.md](../SECURITY.md)
+1. [STORY.md](STORY.md)
+2. [QUICKSTART.md](QUICKSTART.md)
+3. [ARCHITECTURE.md](ARCHITECTURE.md)
+4. [PROTOCOL.md](PROTOCOL.md)
+5. [KEY_MANAGEMENT.md](KEY_MANAGEMENT.md) (operators)
+6. [SECURITY.md](../SECURITY.md)

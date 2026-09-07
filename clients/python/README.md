@@ -10,7 +10,7 @@ pip install aura-fhe
 ```python
 from aura_fhe import connect
 
-fhe = connect()                              # localhost:8443, self-signed TLS ok, keys loaded
+fhe = connect()                              # localhost:8443; genesis via $AFHE_API_URL
 a   = fhe.encrypt_int(25)
 b   = fhe.encrypt_int(17)
 print(fhe.decrypt_int(fhe.add_int(a, b)))    # "42"
@@ -21,7 +21,7 @@ print(fhe.decrypt_int(fhe.add_int(a, b)))    # "42"
 | Arg | Default | Notes |
 |---|---|---|
 | `base_url` | `$AFHE_API_URL` or `https://localhost:8443` | Server URL |
-| `insecure_tls` | `True` iff host is localhost | Pass `True` to accept self-signed certs on other hosts |
+| `insecure_tls` | `True` for localhost and `api.afhe.io` | Pass `True` to accept self-signed certs on other hosts |
 | `auto_load` | `True` | Server-side `POST /load` with the standard key paths |
 | `keys` | `{"skb": "file/skb", "pkb": "file/pkb", "dictb": "file/dictb"}` | Override individual paths |
 | `health_check` | `True` | Probe `GET /health` before returning |

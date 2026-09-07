@@ -9,7 +9,7 @@
 ## Testing
 
 - [ ] Unit tests added or updated
-- [ ] Smoke-tested against a live coprocessor at `https://localhost:8443`
+- [ ] Smoke-tested against genesis (`https://api.afhe.io:8443/health`) or a local node
 - [ ] Docs updated (`README.md`, `docs/`, per-client README)
 - [ ] If this adds a new operation, all four clients (TS / Go / Python / CLI) implement it
 

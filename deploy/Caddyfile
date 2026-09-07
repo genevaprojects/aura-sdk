@@ -1,0 +1,3 @@
+mcp.afhe.io {
+  reverse_proxy mcp:8787
+}

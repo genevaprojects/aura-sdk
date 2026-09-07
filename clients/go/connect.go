@@ -18,7 +18,7 @@ type ConnectOptions struct {
 	BaseURL string
 
 	// InsecureTLS accepts self-signed certificates. When zero, it is
-	// inferred: true for localhost / 127.0.0.1, false otherwise.
+	// inferred: true for localhost and genesis (api.afhe.io).
 	// Use a *bool to distinguish "unset" from "explicitly false".
 	InsecureTLS *bool
 
@@ -45,9 +45,8 @@ type ConnectOptions struct {
 //
 //	c, _ := afhe.Connect(ctx)
 //
-// Reads $AFHE_API_URL if BaseURL is empty. Tolerates the self-signed
-// certificate that the reference local server ships with, but only for
-// localhost / 127.0.0.1.
+// Reads $AFHE_API_URL if BaseURL is empty. Relaxes TLS for localhost
+// and genesis (api.afhe.io).
 func Connect(ctx context.Context, opts ...ConnectOptions) (*Client, error) {
 	o := ConnectOptions{}
 	if len(opts) > 0 {
@@ -67,7 +66,7 @@ func Connect(ctx context.Context, opts ...ConnectOptions) (*Client, error) {
 	if o.InsecureTLS != nil {
 		insecure = *o.InsecureTLS
 	} else {
-		insecure = isLocalhost(baseURL)
+		insecure = trustTLS(baseURL)
 	}
 
 	timeout := o.Timeout
@@ -77,7 +76,7 @@ func Connect(ctx context.Context, opts ...ConnectOptions) (*Client, error) {
 
 	tr := &http.Transport{}
 	if insecure {
-		tr.TLSClientConfig = &tls.Config{InsecureSkipVerify: true} // #nosec G402 — gated on localhost
+		tr.TLSClientConfig = &tls.Config{InsecureSkipVerify: true} // #nosec G402 — localhost or genesis
 	}
 
 	c, err := NewClient(ClientOptions{
@@ -121,7 +120,7 @@ func Connect(ctx context.Context, opts ...ConnectOptions) (*Client, error) {
 //	afhe.Connect(ctx, afhe.ConnectOptions{InsecureTLS: afhe.Bool(false)})
 func Bool(v bool) *bool { return &v }
 
-func isLocalhost(rawURL string) bool {
+func trustTLS(rawURL string) bool {
 	u, err := url.Parse(rawURL)
 	if err != nil {
 		return false
@@ -130,5 +129,6 @@ func isLocalhost(rawURL string) bool {
 	return host == "localhost" ||
 		host == "127.0.0.1" ||
 		host == "::1" ||
+		host == "api.afhe.io" ||
 		strings.HasSuffix(host, ".localhost")
 }
