@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; width: 1600px; height: 900px; background: #0b0d10; }
+  .frame {
+    width: 1600px; height: 900px; box-sizing: border-box;
+    padding: 48px 56px; display: flex; align-items: center; justify-content: center;
+  }
+  .ed {
+    width: 1488px; height: 804px; background: #111318;
+    border: 1px solid #2a2f38; border-radius: 14px; overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,.45);
+    font-family: "JetBrains Mono", "Cascadia Mono", "DejaVu Sans Mono", ui-monospace, monospace;
+  }
+  .bar {
+    height: 44px; display: flex; align-items: center; gap: 8px;
+    padding: 0 16px; background: #1a1d24; border-bottom: 1px solid #2a2f38;
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .r { background: #ff5f57; } .y { background: #febc2e; } .g { background: #28c840; }
+  .title { flex: 1; text-align: center; color: #8b919c; font-size: 14px; }
+  .tabs { display: flex; gap: 0; background: #15181f; border-bottom: 1px solid #2a2f38; }
+  .tab { padding: 10px 18px; color: #8b919c; font-size: 14px; }
+  .tab.on { color: #e6edf3; background: #111318; }
+  pre {
+    margin: 0; padding: 28px 32px; color: #d7dbe2; font-size: 22px; line-height: 1.5;
+  }
+  .k { color: #7dd3fc; }
+  .s { color: #86efac; }
+  .n { color: #8b919c; }
+</style>
+</head>
+<body>
+  <div class="frame">
+    <div class="ed">
+      <div class="bar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <div class="title">.cursor/mcp.json</div>
+      </div>
+      <div class="tabs"><div class="tab on">mcp.json</div><div class="tab">host.mjs</div></div>
+<pre>{
+  <span class="k">"mcpServers"</span>: {
+    <span class="k">"private-compute"</span>: {
+      <span class="k">"command"</span>: <span class="s">"npx"</span>,
+      <span class="k">"args"</span>: [<span class="s">"-y"</span>, <span class="s">"github:aurafhe-official/mcp"</span>]
+    }
+  }
+}
+
+<span class="n">// host then calls:</span>
+{
+  <span class="k">"name"</span>: <span class="s">"fhe_private_eval"</span>,
+  <span class="k">"arguments"</span>: {
+    <span class="k">"domain"</span>: <span class="s">"int"</span>,
+    <span class="k">"op"</span>: <span class="s">"add"</span>,
+    <span class="k">"values"</span>: [25, 17],
+    <span class="k">"reveal"</span>: true
+  }
+}</pre>
+    </div>
+  </div>
+</body>
+</html>
