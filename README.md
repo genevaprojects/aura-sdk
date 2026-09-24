@@ -73,6 +73,18 @@ fhe enc int 17 > b.ct
 fhe add int "$(cat a.ct)" "$(cat b.ct)" | fhe dec int
 ```
 
+### MCP (Cursor)
+
+```bash
+cd clients/mcp && npm install && npm run build
+npx aura-fhe-mcp --config cursor --demo
+```
+
+Paste the printed `aura` entry into `.cursor/mcp.json`, then ask:
+
+> Show me the Aura demo. I am new to FHE; explain each step as we go.
+
+
 ---
 
 ## What the SDK covers
@@ -113,6 +125,7 @@ clients/
   go/           github.com/aurafhe/fhe-client/clients/go
   python/       aura-fhe
   cli/          @aura/fhe-cli
+  mcp/          @aura/fhe-mcp     aura-fhe-mcp --config cursor --demo
 
 examples/
   01-hello-fhe-node/

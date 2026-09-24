@@ -126,6 +126,16 @@ Do not mix `int`, `float`, `string`, and `binary` ciphertexts in one operation.
 
 ---
 
+## 5. Cursor MCP
+
+```bash
+cd clients/mcp && npm install && npm run build
+npx aura-fhe-mcp --config cursor --demo
+```
+
+Paste the printed entry into `.cursor/mcp.json` and reconnect. Then ask
+the agent to show the Aura demo.
+
 ## Next steps
 
 - Examples: [`examples/`](../examples/)

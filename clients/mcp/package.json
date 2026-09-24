@@ -1,0 +1,39 @@
+{
+  "name": "@aura/fhe-mcp",
+  "version": "0.5.0",
+  "description": "Aura FHE MCP adapter. aura-fhe-mcp --config cursor --demo",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "aura-fhe-mcp": "dist/index.js",
+    "aura-fhe": "dist/index.js"
+  },
+  "files": ["dist", "README.md"],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "tsc && chmod +x dist/index.js",
+    "test": "npm run build && tsx --test test/*.test.ts",
+    "start": "node dist/index.js",
+    "check": "node dist/index.js --check"
+  },
+  "keywords": ["mcp", "fhe", "aura", "cursor"],
+  "author": "Aura FHE",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aurafhe/fhe-client.git",
+    "directory": "clients/mcp"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "2.0.0",
+    "zod": "4.5.4"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/client": "2.0.0",
+    "@types/node": "22.20.1",
+    "tsx": "4.23.13",
+    "typescript": "5.9.3"
+  }
+}
