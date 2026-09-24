@@ -27,6 +27,9 @@ cd clients/python && pip install -e . && pytest
 
 # CLI
 cd clients/cli && npm install && npm test
+
+# MCP
+cd clients/mcp && npm install && npm test
 ```
 
 All clients target the same HTTP protocol (see `docs/PROTOCOL.md`). When you add

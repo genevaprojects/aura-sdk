@@ -13,3 +13,4 @@ your preferred Aura FHE server or point them at any other URL via the
 | 04 | [04-browser](./04-browser/) | HTML + ESM | Same demo, single HTML file |
 | 05 | [05-cli](./05-cli/) | Shell | `fhe enc \| fhe call \| fhe dec` |
 | 06 | [06-secure-sum](./06-secure-sum/) | Node.js | Two parties, encrypted addition, neither sees the other's input |
+| — | [mcp](./mcp/) | MCP | `aura-fhe-mcp --config cursor --demo` |
